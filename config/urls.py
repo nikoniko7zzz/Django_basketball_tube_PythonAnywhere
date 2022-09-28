@@ -20,7 +20,7 @@ from base import views # 追加
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Items
-    # path('', views.IndexListView.as_view()),  # トップページ
-    path('', views.index, name='index'),
+    path('', views.IndexListView.as_view()),  # トップページ
+    # path('', views.index, name='index'),
     # path('', views.index()),  # トップページ
 ]
