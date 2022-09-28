@@ -143,6 +143,12 @@ if not DEBUG:
     import os
     import django_heroku
 
+    import dj_database_url
+    db_from_env = dj_database_url.config()
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
+
     # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     BASE_DIR = Path(__file__).resolve().parent.parent # 追加
 
