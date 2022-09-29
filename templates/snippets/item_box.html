@@ -1,7 +1,12 @@
-<div class="card w-100">
-  <div class="card-body">
-    <h5 class="card-title">{{object.title}}</h5>
-    <p class="card-text">{{object.description}}</p>
-    <iframe src="{{object.youtube_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="/items/{{object.pk}}/" style="text-decoration:none;">
+  <div class="card w-100">
+    <div class="card-body">
+      <h5 class="card-title">{{object.title}}</h5>
+      <p class="card-text">{{object.description}}</p>
+    </div>
+    <div class="embed-responsive embed-responsive-4by3">
+      <iframe class="embed-responsive-item" src="{{object.youtube_url}}" title="YouTube video player" frameborder="0">
+      </iframe>
+    </div>
   </div>
-</div>
+</a>

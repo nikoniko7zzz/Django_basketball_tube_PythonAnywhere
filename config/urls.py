@@ -15,12 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from base import views # 追加
+from base import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Items
     path('', views.IndexListView.as_view()),  # トップページ
-    # path('', views.index, name='index'),
-    # path('', views.index()),  # トップページ
+    path('items/<str:pk>/', views.ItemDetailView.as_view()),  # 個別のItem詳細ページ
 ]
