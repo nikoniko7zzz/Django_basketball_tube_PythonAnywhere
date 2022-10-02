@@ -128,6 +128,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static'] #追加
 
+# カスタムユーザーモデルを使うための設定
+AUTH_USER_MODEL = 'base.User' # base.Userモデルを使う
+
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/' # ログインした後のページ指定
+
+LOGOUT_URL = '/logout/'
+
+LOGOUT_REDIRECT_URL = '/login/'
+
+
+
 DEBUG = False
 
 try:

@@ -16,9 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from base import views
+from django.contrib.auth.views import LogoutView # 追加 viewは自作せずdjangoの機能を使う
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('', views.IndexListView.as_view()),  # トップページ
     path('items/<str:pk>/', views.ItemDetailView.as_view()),  # 個別のItem詳細ページ
+
+    # Account 追加
+    path('login/', views.Login.as_view()),
+    path('logout/', LogoutView.as_view()),
+    path('signup/', views.SignUpView.as_view()),
+    path('account/', views.AccountUpdateView.as_view()),
+    path('profile/', views.ProfileUpdateView.as_view()),
 ]
