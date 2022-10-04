@@ -55,8 +55,6 @@ class ItemDetailView(ModelFormMixin, DetailView):
 
 
 
-
-
 '''
 class ItemDetailView(ModelFormMixin, DetailView)を作るにあたり参考にしたサイト
 

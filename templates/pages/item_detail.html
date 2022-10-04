@@ -20,4 +20,17 @@
   <a class="button btn-link" href="">送信せずに戻る</a>
 </form>
 
+<br>
+
+<div>
+  <h2>コメント一覧</h2>
+  {% for comment in object.comment_set.all %}
+  <div>
+    <p>コメント：{{ comment.comment_text }}</p>
+    <p>投稿者：{{ comment.author.profile.name }}</p>
+    <p>投稿日：{{ comment.updated_at }}</p>
+  </div>
+  {% endfor %}
+</div>
+
 {% endblock main %}
