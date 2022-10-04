@@ -12,4 +12,12 @@
   </div>
 </div>
 
-{% endblock %}
+<!-- コメント作成用 -->
+<form method="POST">
+  {% csrf_token %}
+  {{ form.comment_text }}
+  <button type="submit">Save</button>
+  <a class="button btn-link" href="">送信せずに戻る</a>
+</form>
+
+{% endblock main %}

@@ -1,6 +1,7 @@
+from xml.etree.ElementTree import Comment
 from django.contrib import admin
 from django.contrib.auth.models import Group  # 元からあるグループ
-from base.models import Item, Tag, User, Profile #追加
+from base.models import Item, Tag, User, Profile, Comment #追加
 from base.forms import UserCreationForm #追加
 from django.contrib.auth.admin import UserAdmin #追加
 
@@ -41,6 +42,7 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(Item, ItemAdmin)     # 管理者画面にモデルを反映させる
 admin.site.register(Tag)
+admin.site.register(Comment)
 admin.site.register(User, CustomUserAdmin) # カスタムユーザーで追加
 admin.site.unregister(Group)  # 元からある[グループ]を使わないので非表示に設定
 

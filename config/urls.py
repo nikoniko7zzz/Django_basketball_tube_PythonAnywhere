@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.IndexListView.as_view()),  # トップページ
-    path('items/<str:pk>/', views.ItemDetailView.as_view()),  # 個別のItem詳細ページ
+    path('items/<str:pk>/', views.ItemDetailView.as_view(), name="item_detail"),
 
     # Account 追加
     path('login/', views.Login.as_view()),
