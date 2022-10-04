@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.IndexListView.as_view()),  # トップページ
+    path('comment/', views.CommentListView.as_view()),  # 自分のコメントページ
     path('items/<str:pk>/', views.ItemDetailView.as_view(), name="item_detail"),
 
     # Account 追加

@@ -1,6 +1,6 @@
 # from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from base.models import Item
+from base.models import Item, Comment
 from django.views.generic.edit import ModelFormMixin
 from base.forms import CommentCreateForm
 from django.urls import reverse
@@ -53,6 +53,9 @@ class ItemDetailView(ModelFormMixin, DetailView):
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
 
+class CommentListView(ListView):
+    model = Comment     # Itemモデルのデータを持ってくる
+    template_name = 'pages/comment.html'
 
 
 '''
