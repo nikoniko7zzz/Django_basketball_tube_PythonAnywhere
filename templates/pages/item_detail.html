@@ -4,33 +4,40 @@
 
 <div class="card w-100">
   <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" src="{{object.youtube_url}}?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <!-- embed: 埋め込み, rel=0: 関連動画を非表示, modestbranding=1: YouTubeロゴの非表示 -->
+    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{object.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+    </iframe>
   </div>
   <div class="card-body">
-    <h5 class="card-title">{{object.title}}</h5>
+    <h5 class="card-title">タイトル{{object.title}}</h5>
     <p class="card-text">{{object.description}}</p>
   </div>
 </div>
 
 <!-- コメント作成用 -->
-<form method="POST">
-  {% csrf_token %}
-  {{ form.comment_text }}
-  <button type="submit">Save</button>
-  <a class="button btn-link" href="">送信せずに戻る</a>
-</form>
+<div class="container my-5">
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.comment_text }}
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+    <a class="button btn-link" href="">送信せずに戻る</a>
+  </form>
 
-<br>
 
-<div>
-  <h2>コメント一覧</h2>
-  {% for comment in object.comment_set.all %}
-  <div>
-    <p>コメント：{{ comment.comment_text }}</p>
-    <p>投稿者：{{ comment.author.profile.name }}</p>
-    <p>投稿日：{{ comment.updated_at }}</p>
-  </div>
-  {% endfor %}
+
+  <ol class="list-group list-group-numbered">
+    {% for comment in object.comment_set.all %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <small class="text-muted">{{comment.author.profile.name}}　　　</small>
+        <small class="text-muted">{{comment.updated_at}}</small>
+        <p class="mb-1">{{comment.comment_text}}</p>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
 </div>
 
 {% endblock main %}

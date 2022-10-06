@@ -1,3 +1,8 @@
-h1 {
-  color: red;
+body {
+  background-color: transparent;
+}
+
+/* 訪問後のリンクの色を変えない */
+a,a:visited{
+    color: #212529;/*カラーコードは任意*/
 }

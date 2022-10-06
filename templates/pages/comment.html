@@ -2,19 +2,21 @@
 
 {% block main %}
 
+<div class="container my-5">
 
-<ol class="list-group list-group-numbered">
-  {% for object in object_list %}
-  {% if user == object.author %}
-  <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="ms-2 me-auto">
-      <div class="fw-bold">{{object.author.profile.name}}</div>
-      <div class="fw-bold">{{object.updated_at}}</div>
-      {{object.comment_text}}
-    </div>
-  </li>
-  {% endif %}
-  {% endfor %}
-</ol>
+  <ol class="list-group list-group-numbered">
+    {% for object in object_list reversed %}
+    {% if user == object.author %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <small class="text-muted">{{object.author.profile.name}}</small>
+        <small class="text-muted">{{object.updated_at}}</small>
+        <p class="mb-1">{{object.comment_text}}</p>
+      </div>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ol>
+</div>
 
 {% endblock main %}

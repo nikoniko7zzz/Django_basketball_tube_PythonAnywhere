@@ -1,16 +1,24 @@
-<div class="py-1 bg-dark ">
-  <nav class="container d-flex flex-column flex-md-row justify-content-between">
-    <a class="py-2 text-white" href="/">🏀Ryukoku</a>
-    <a class="py-2 d-none d-md-inline-block text-white" href="/comment/">Comment</a>
-    <a class="py-2 d-none d-md-inline-block text-white" href="/profile/">Profile</a>
-    <a class="py-2 d-none d-md-inline-block text-white" href="/account/">Account</a>
-    <a class="py-2 d-none d-md-inline-block text-white" href="/cart/">Cart</a>
-    <!-- ログインしているか、していないかで出しわけ -->
-    {% if user.is_authenticated %}
-    <a class="py-2 d-none d-md-inline-block text-white" href="/logout/">Logout</a>
-    {% else %}
-    <a class="py-2 d-none d-md-inline-block text-white" href="/login/">Login</a>
-    <a class="py-2 d-none d-md-inline-block text-white" href="/signup/">SignUp</a>
-    {% endif %}
-  </nav>
+<nav class="navbar navbar-expand-lg  container d-flex flex-column flex-md-row navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="/">🏀BukatuNote</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="#">Home</a>
+        <a class="nav-link" href="/comment/">Comment</a>
+        <a class="nav-link" href="/profile/">Profile</a>
+        <a class="nav-link" href="/account/">Account</a>
+        <!-- ログインしているか、していないかで出しわけ -->
+        {% if user.is_authenticated %}
+        <a class="nav-link" href="/logout/">Logout</a>
+        {% else %}
+        <a class="nav-link" href="/login/">Login</a>
+        <a class="nav-link" href="/signup/">SignUp</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
 </div>
