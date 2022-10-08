@@ -1,8 +1,24 @@
 body {
-  background-color: transparent;
+  /* ヘッダー分が隠れないように */
+  padding-top: 56px;
 }
 
-/* 訪問後のリンクの色を変えない */
-a,a:visited{
-    color: #212529;/*カラーコードは任意*/
+/* a {
+  text-decoration:none
+} */
+
+
+/* ****************************************************** */
+/* bootstrapのclass */
+.card-body {
+  padding: 0.5rem;
+
 }
+.card-title, .card-text {
+  margin: 0;
+}
+
+small {
+  color: gray;
+}
+

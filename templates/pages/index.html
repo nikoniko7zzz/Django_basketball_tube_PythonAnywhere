@@ -2,14 +2,27 @@
 
 {% block main %}
 
+<div class="container-fluid mt-3">
+  <!-- Tagモデルの全てを取得 -->
+  {% for tag in tag_list %}
+  <a href="/tags/{{tag.slug}}/" class="btn btn-light btn-sm mb-1">{{ tag.name }}</a>
+  {% endfor %}
+  <a href="/" class="btn btn-light btn-sm">ALL</a>
+</div>
+
 <div class="container" style="max-width:100%">
-  <div class="row my-5">
-    {% for object in object_list reversed %}
-    <div class="col-12 col-lg-3 my-3">
+  <div class="row mt-2 mb-5">
+    {% for item in item_list reversed %}
+    <div class="col-12 col-lg-3 my-1">
       {% include 'snippets/item_box.html' %}
     </div>
     {% endfor %}
   </div>
+</div>
+
+<!-- ページング処理の部分 -->
+<div class="container">
+  {% include 'snippets/pagination.html' %}
 </div>
 
 {% endblock main %}

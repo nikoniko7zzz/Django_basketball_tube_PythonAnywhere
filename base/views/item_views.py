@@ -1,6 +1,6 @@
 # from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from base.models import Item, Comment
+from base.models import Item, Comment, Tag
 from django.views.generic.edit import ModelFormMixin
 from base.forms import CommentCreateForm
 from django.urls import reverse
@@ -11,6 +11,25 @@ from django.http import HttpResponseRedirect
 class IndexListView(ListView):
     model = Item     # Itemモデルのデータを持ってくる
     template_name = 'pages/index.html'
+    context_object_name = 'item_list'
+    paginate_by = 2 # テスト用
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['tag_list'] = Tag.objects.all
+        return context
+
+
+class TagListView(IndexListView, ListView):
+    paginate_by = 2 # テスト用
+    # paginate_by = 4 # 松尾仕様
+
+    def get_queryset(self): # get_queryset の上書き
+        self.tag = Tag.objects.get(slug=self.kwargs['pk'])
+        return Item.objects.filter(tags=self.tag)
+
+
+
 
 
 # Itemモデルのpkをもとに個別データを返す
@@ -56,6 +75,9 @@ class ItemDetailView(ModelFormMixin, DetailView):
 class CommentListView(ListView):
     model = Comment     # Itemモデルのデータを持ってくる
     template_name = 'pages/comment.html'
+
+
+
 
 
 '''

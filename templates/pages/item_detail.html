@@ -9,8 +9,12 @@
     </iframe>
   </div>
   <div class="card-body">
-    <h5 class="card-title">タイトル{{object.title}}</h5>
-    <p class="card-text">{{object.description}}</p>
+    <!-- 各Itemに紐づくtagを全て取得する -->
+    {% for tag in items.tags.all %}
+    <p class="card-text">#{{tag}}</p>
+    {% endfor %}
+    <p class="card-title">{{items.title}}</p>
+    <p class="card-text">{{items.description}}</p>
   </div>
 </div>
 
@@ -19,25 +23,26 @@
   <form method="POST">
     {% csrf_token %}
     {{ form.comment_text }}
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Save</button>
+    <div class="text-right my-2">
+      <button type="submit" class="btn btn-light btn-sm">キャンセル</button>
+      <button type="" class="btn btn-light btn-sm">コメント</button>
     </div>
-    <a class="button btn-link" href="">送信せずに戻る</a>
   </form>
 
-
-
-  <ol class="list-group list-group-numbered">
-    {% for comment in object.comment_set.all %}
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-      <div class="ms-2 me-auto">
-        <small class="text-muted">{{comment.author.profile.name}}　　　</small>
-        <small class="text-muted">{{comment.updated_at}}</small>
-        <p class="mb-1">{{comment.comment_text}}</p>
+  <!-- コメント一覧用 -->
+  <div class="container">
+    {% for comment in items.comment_set.all %}
+    <div class="mb-2">
+      <div class="row justify-content-between">
+        <div><small>{{comment.author.profile.name}}</small></div>
+        <div><small>{{comment.updated_at}}</small></div>
       </div>
-    </li>
+      <div class="row">
+        <small>{{comment.comment_text}}</small>
+      </div>
+    </div>
     {% endfor %}
-  </ol>
+  </div>
 </div>
 
 {% endblock main %}
