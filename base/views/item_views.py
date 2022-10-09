@@ -6,9 +6,11 @@ from base.forms import CommentCreateForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin # ログインしている人だけ
 
 
-class IndexListView(ListView):
+
+class IndexListView(LoginRequiredMixin, ListView):
     model = Item     # Itemモデルのデータを持ってくる
     template_name = 'pages/index.html'
     context_object_name = 'item_list'
@@ -81,7 +83,7 @@ class ItemDetailView(ModelFormMixin, DetailView):
 #     model = Comment
 #     template_name = 'pages/comment.html'
 
-class CommentListView(ModelFormMixin, ListView):
+class CommentListView(LoginRequiredMixin, ModelFormMixin, ListView):
     model = Comment
     template_name = 'pages/comment.html'
     # context_object_name = 'comment_objects'
@@ -109,7 +111,7 @@ class CommentListView(ModelFormMixin, ListView):
             return self.form_invalid(form)
 
 
-class EveryoneCommentListView(ListView):
+class EveryoneCommentListView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'pages/everyone_comment.html'
 
