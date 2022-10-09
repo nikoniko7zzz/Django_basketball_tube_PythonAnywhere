@@ -2,12 +2,13 @@
 
 {% block main %}
 
-<div class="container-fluid mt-3">
+<div class="container-fluid my-3">
   <!-- Tagモデルの全てを取得 -->
   {% for tag in tag_list %}
   <a href="/tags/{{tag.slug}}/" class="btn btn-light btn-sm mb-1">{{ tag.name }}</a>
   {% endfor %}
   <a href="/" class="btn btn-light btn-sm">ALL</a>
+  <small class="ml-3">動画 {{total_item}}本</small>
 </div>
 
 <div class="container" style="max-width:100%">

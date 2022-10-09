@@ -12,23 +12,28 @@ class IndexListView(ListView):
     model = Item     # Itemモデルのデータを持ってくる
     template_name = 'pages/index.html'
     context_object_name = 'item_list'
-    paginate_by = 2 # テスト用
+    paginate_by = 8
+    # paginate_by = 2 # テスト用
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['tag_list'] = Tag.objects.all
+        context['total_item'] = Item.objects.all().count()
         return context
 
 
 class TagListView(IndexListView, ListView):
-    paginate_by = 2 # テスト用
-    # paginate_by = 4 # 松尾仕様
+    paginate_by = 8
+    # paginate_by = 2 # テスト用
 
     def get_queryset(self): # get_queryset の上書き
         self.tag = Tag.objects.get(slug=self.kwargs['pk'])
         return Item.objects.filter(tags=self.tag)
 
-
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['total_item'] = Item.objects.filter(tags=self.tag).count()
+        return context
 
 
 
@@ -104,7 +109,9 @@ class CommentListView(ModelFormMixin, ListView):
             return self.form_invalid(form)
 
 
-
+class EveryoneCommentListView(ListView):
+    model = Comment
+    template_name = 'pages/everyone_comment.html'
 
     # def get_success_url(self):
     #     return reverse_lazy('comment')
