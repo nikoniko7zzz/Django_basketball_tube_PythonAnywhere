@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView
 from base.models import Item, Comment, Tag
 from django.views.generic.edit import ModelFormMixin
 from base.forms import CommentCreateForm
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 
@@ -72,13 +72,42 @@ class ItemDetailView(ModelFormMixin, DetailView):
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
 
-class CommentListView(ListView):
-    model = Comment     # Itemモデルのデータを持ってくる
+# class CommentListView(ListView):
+#     model = Comment
+#     template_name = 'pages/comment.html'
+
+class CommentListView(ModelFormMixin, ListView):
+    model = Comment
     template_name = 'pages/comment.html'
+    # context_object_name = 'comment_objects'
+    form_class = CommentCreateForm
+    success_url = reverse_lazy('comment')
+
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        self.object_list = self.get_queryset()
+        form = self.get_form()
+
+        def form_valid(self, form):
+            comment = form.save(commit=False)
+            comment.author = self.request.user
+            comment.save()
+            return HttpResponseRedirect(reverse('comment'))
+
+        if form.is_valid():
+            return form_valid(self, form)
+        else:
+            return self.form_invalid(form)
 
 
 
 
+    # def get_success_url(self):
+    #     return reverse_lazy('comment')
 
 '''
 class ItemDetailView(ModelFormMixin, DetailView)を作るにあたり参考にしたサイト
