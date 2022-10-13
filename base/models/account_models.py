@@ -2,7 +2,13 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from base.models import create_id # item_models.py のcreate_id関数(22文字のランダムな文字列を作る)
+from django.utils.crypto import get_random_string #ランダム文字列作成 id用
+
+
+def create_id():
+    return get_random_string(22) # 22文字のランダムな文字列を作る
+# idをランダムにすると、ユーザーに予測がされにくくい
+
 # from datetime import date # 年齢計算用
 # from dateutil.relativedelta import relativedelta # 年齢計算用
 

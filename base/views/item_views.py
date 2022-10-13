@@ -1,8 +1,8 @@
 # from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from base.models import Item, Comment, Tag
 from django.views.generic.edit import ModelFormMixin
-from base.forms import CommentCreateForm
+from base.forms import CommentCreateForm, ItemCreateForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -14,7 +14,7 @@ class IndexListView(LoginRequiredMixin, ListView):
     model = Item     # Itemモデルのデータを持ってくる
     template_name = 'pages/index.html'
     context_object_name = 'item_list'
-    paginate_by = 8
+    paginate_by = 2
     # paginate_by = 2 # テスト用
 
     def get_context_data(self, *args, **kwargs):
@@ -35,6 +35,8 @@ class TagListView(IndexListView, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['total_item'] = Item.objects.filter(tags=self.tag).count()
+        self.tag = Tag.objects.get(slug=self.kwargs['pk'])
+        context['tag_name'] = self.tag
         return context
 
 
@@ -78,6 +80,31 @@ class ItemDetailView(ModelFormMixin, DetailView):
 
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
+
+
+# class ItemCreateView(LoginRequiredMixin, CreateView):
+#     model = Item
+#     form_class = ItemCreateForm
+#     template_name = 'pages/item_create.html'
+#     success_url = reverse_lazy('item_create')
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['add_item_form'] = ItemCreateForm    #ここで定義した変数名
+#         return context
+class ItemCreateView(LoginRequiredMixin, CreateView):
+    model = Item
+    template_name = 'pages/item_create.html'
+    form_class = ItemCreateForm
+
+    # form_valid関数をオーバーライドすることで、更新するフィールドと値を指定できる
+    def form_valid(self, form):
+        item = form.save(commit=False)
+        item.author = self.request.user
+        item.save()
+        return HttpResponseRedirect(reverse('item_create'))
+
+
 
 # class CommentListView(ListView):
 #     model = Comment

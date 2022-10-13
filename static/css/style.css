@@ -12,8 +12,8 @@ body {
 /* bootstrapのclass */
 .card-body {
   padding: 0.5rem;
-
 }
+
 .card-title, .card-text {
   margin: 0;
 }
@@ -21,6 +21,29 @@ body {
 small {
   color: gray;
 }
+
 .list-group-item {
   padding: 0.8rem 0;
+}
+
+::marker {
+  color: blue;
+  font-size: 0;
+  /* font-size: 1.2em; */
+}
+
+li {
+	list-style-type:none;		/*リストマーカー無しにする*/
+}
+li.page-item::marker {
+  list-style-type:none;		/*リストマーカー無しにする*/
+}
+
+/* ****************************************************** */
+/* 改行で自動で大きさが変わるtextarea */
+#id_description {
+  resize: none;
+  line-height: 1.5;
+  width: 100%;
+  /* padding: 10; */
 }

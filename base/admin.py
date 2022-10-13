@@ -5,12 +5,12 @@ from base.models import Item, Tag, User, Profile, Comment #追加
 from base.forms import UserCreationForm #追加
 from django.contrib.auth.admin import UserAdmin #追加
 
-class TagInline(admin.TabularInline):
-    model = Item.tags.through
+# class TagInline(admin.TabularInline):
+#     model = Item.tags.through
 
-class ItemAdmin(admin.ModelAdmin):
-    inlines = [TagInline] # クラスTagInlineをinlinesに渡す
-    exclude = ['tags']    # モデル作成時に作った'tags'をexclude(除外)する
+# class ItemAdmin(admin.ModelAdmin):
+#     inlines = [TagInline] # クラスTagInlineをinlinesに渡す
+#     exclude = ['tags']    # モデル作成時に作った'tags'をexclude(除外)する
 
 # カスタムユーザー用
 class ProfileInline(admin.StackedInline):
@@ -40,7 +40,8 @@ class CustomUserAdmin(UserAdmin):
 
 
 
-admin.site.register(Item, ItemAdmin)     # 管理者画面にモデルを反映させる
+admin.site.register(Item)     # 管理者画面にモデルを反映させる
+# admin.site.register(Item, ItemAdmin)     # 管理者画面にモデルを反映させる
 admin.site.register(Tag)
 admin.site.register(Comment)
 admin.site.register(User, CustomUserAdmin) # カスタムユーザーで追加
