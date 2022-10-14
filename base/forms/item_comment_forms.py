@@ -6,11 +6,10 @@ class CommentCreateForm(forms.ModelForm):
     """コメント投稿フォーム"""
     class Meta:
         model = Comment
+        fields  = ('comment_text',)
+        labels = {'comment_text': '',}
         widgets = {
-            'comment_text': forms.TextInput(
-                attrs={
-                    'placeholder': 'コメントする',
-                    'class': 'form-control',
-        })}
-        # exclude:フォーム画面では表示されない
-        exclude = ('author','target', 'created_at', 'updated_at')
+            'comment_text': forms.Textarea(
+                attrs={'class': 'form-control my-3', 'placeholder': 'コメントする', 'rows':'1', 'oninput':'resizeCommentTextarea();', }),
+        }
+

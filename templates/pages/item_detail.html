@@ -9,40 +9,81 @@
     </iframe>
   </div>
   <div class="card-body">
-    <!-- 各Itemに紐づくtagを全て取得する -->
-    {% for tag in items.tags.all %}
-    <p class="card-text">#{{tag}}</p>
-    {% endfor %}
-    <p class="card-title">{{items.title}}</p>
-    <p class="card-text">{{items.description}}</p>
-  </div>
-</div>
-
-<!-- コメント作成用 -->
-<div class="container my-2">
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.comment_text }}
-    <div class="text-right my-2">
-      <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
-      <button type="submit" class="btn btn-info btn-sm">コメント</button>
-    </div>
-  </form>
-
-  <!-- コメント一覧用 -->
-  <div class="container">
-    {% for comment in items.comment_set.all %}
-    <div class="mb-2">
+    <div class="item_detail_basicData">
       <div class="row justify-content-between">
-        <div><small>{{comment.author.profile.name}}</small></div>
-        <div><small>{{comment.updated_at}}</small></div>
+        <div class="col-4 align-self-start" style="padding-right: 0px;"><small class="card-text">#{{item.tag}}</small></div>
+        <div class="col-8 align-self-end text-right" style="padding-left: 0;"><small class="card-text">{{item.updated_at}}</small></div>
       </div>
-      <div class="row">
-        <small>{{comment.comment_text}}</small>
-      </div>
+      <small class="card-title">{{item.title}}</small>
     </div>
-    {% endfor %}
-  </div>
-</div>
 
-{% endblock main %}
+    <div class="accordion mt-2" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingDescription">
+          <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+            動画詳細
+          </button>
+        </h2>
+        <div id="collapseDescription" class="accordion-collapse collapse show" aria-labelledby="headingDescription">
+          <div class="accordion-body">
+            <!-- データを入力時と同じ改行で表示する value | linebreaksbr  -->
+            <small class="card-text">{{item.description | linebreaksbr }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingCreateComment">
+          <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCreateComment" aria-expanded="false" aria-controls="collapseCreateComment">
+            コメントする
+          </button>
+        </h2>
+        <div id="collapseCreateComment" class="accordion-collapse collapse" aria-labelledby="headingCreateComment">
+          <div class="accordion-body">
+            <!-- コメント作成用 -->
+            <form method="POST">
+              {% csrf_token %}
+              {{ form }}
+              <div class="text-right my-2">
+                <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
+                <button type="submit" class="btn btn-info btn-sm">コメント</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingListComment">
+          <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseListComment" aria-expanded="false" aria-controls="collapseListComment">
+            コメントを見る　　{{comment_count}} 件
+          </button>
+        </h2>
+        <div id="collapseListComment" class="accordion-collapse collapse" aria-labelledby="headingListComment">
+          <div class="accordion-body">
+
+            {% for comment in item.comment_set.all %}
+            <div class="detail_comment_list py-2">
+              <div class="row justify-content-between">
+                <div class="col-5">
+                  <small class="text-muted">{{ comment.author.profile.name }}</small>
+                </div>
+                <div class="col-7  text-right">
+                  <small class="text-muted mr-4">{{ comment.updated_at }}</small>
+                </div>
+              </div>
+              <small class="mb-1">{{ comment.comment_text| linebreaksbr}}</small>
+
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <i class="fa-regular fa-comment-pen"></i>
+  </div>
+
+
+  {% endblock main %}

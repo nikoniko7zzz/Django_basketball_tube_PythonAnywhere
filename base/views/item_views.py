@@ -14,7 +14,7 @@ class IndexListView(LoginRequiredMixin, ListView):
     model = Item     # Itemモデルのデータを持ってくる
     template_name = 'pages/index.html'
     context_object_name = 'item_list'
-    paginate_by = 2
+    paginate_by = 8
     # paginate_by = 2 # テスト用
 
     def get_context_data(self, *args, **kwargs):
@@ -30,11 +30,11 @@ class TagListView(IndexListView, ListView):
 
     def get_queryset(self): # get_queryset の上書き
         self.tag = Tag.objects.get(slug=self.kwargs['pk'])
-        return Item.objects.filter(tags=self.tag)
+        return Item.objects.filter(tag=self.tag)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['total_item'] = Item.objects.filter(tags=self.tag).count()
+        context['total_item'] = Item.objects.filter(tag=self.tag).count()
         self.tag = Tag.objects.get(slug=self.kwargs['pk'])
         context['tag_name'] = self.tag
         return context
@@ -55,7 +55,7 @@ class ItemDetailView(ModelFormMixin, DetailView):
     """
     model = Item
     template_name = 'pages/item_detail.html'
-    context_object_name = 'items'
+    context_object_name = 'item'
     form_class = CommentCreateForm
 
     # no get_context_data override
@@ -80,6 +80,14 @@ class ItemDetailView(ModelFormMixin, DetailView):
 
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
+
+    # 動画に紐づいたコメント数を返す
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        item = get_object_or_404(Item, pk=self.object.pk)
+        self.target = item.pk
+        context['comment_count'] = Comment.objects.filter(target=self.target).count()
+        return context
 
 
 # class ItemCreateView(LoginRequiredMixin, CreateView):
@@ -130,6 +138,7 @@ class CommentListView(LoginRequiredMixin, ModelFormMixin, ListView):
             comment = form.save(commit=False)
             comment.author = self.request.user
             comment.save()
+            print('保存しました')
             return HttpResponseRedirect(reverse('comment'))
 
         if form.is_valid():

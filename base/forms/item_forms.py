@@ -20,7 +20,7 @@ class ItemCreateForm(forms.ModelForm):
             'title': forms.TextInput(
                 attrs={'class': 'form-control mb-3', 'placeholder': '試合名, 対戦相手 など',}),
             'description': forms.Textarea(
-                attrs={'class': 'form-control mb-3', 'placeholder': '動画詳細を入力してください', 'rows':'1', 'oninput':"resizeTextarea()"}),
+                attrs={'class': 'form-control mb-3', 'placeholder': '動画詳細を入力してください', 'rows':'1', 'oninput':"resizeItemTextarea();",}),
         }
 
 

@@ -1,13 +1,11 @@
 <a href="/items/{{item.pk}}/">
   <div class="card w-100">
     <div class="card-body">
-      <!-- 各Itemに紐づくtagを全て取得する -->
-      {% for tag in item.tags.all %}
-      <p class="card-text">#{{tag}}</p>
-      {% endfor %}
-
-      <p class="card-title">{{item.title}}</p>
-      <p class="card-text">{{item.description}}</p>
+      <div class="row justify-content-between">
+        <div class="col-4 align-self-start" style="padding-right: 0px;"><small class="card-text">#{{item.tag}}</small></div>
+        <div class="col-8 align-self-end text-right" style="padding-left: 0;"><small class="card-text">{{item.updated_at}}</small></div>
+      </div>
+      <small class="card-title">{{item.title}}</small>
     </div>
     <div class="embed-responsive embed-responsive-4by3">
       <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{item.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0">

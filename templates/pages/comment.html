@@ -5,7 +5,7 @@
 <div class="container my-2">
   <form method="POST">
     {% csrf_token %}
-    {{ form.comment_text }}
+    {{ form }}
     <div class="text-right my-2">
       <button type="submit" class="btn btn-info btn-sm disabled">キャンセル</button>
       <button type="" class="btn btn-info btn-sm">コメント</button>
@@ -18,21 +18,13 @@
   <ol class="list-group list-group-numbered">
     {% for object in object_list reversed %}
     {% if user == object.author %}
-    <li class="list-group-item">
-      <div class=" container-fluid">
-        <div class="row justify-content-between">
-          <div class="col-5">
-            <small class="text-muted">{{object.author.profile.name}}</small>
-          </div>
-          <div class="col-7  text-right">
-
-            <small class="text-muted mr-4">{{object.updated_at}}</small>
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-          </div>
-        </div>
-        <p class="mb-1">{{object.comment_text}}</p>
+    <div class="detail_comment_list py-2">
+      <div class="row justify-content-between">
+        <small class="text-muted mr-4">{{ object.updated_at }}</small>
+        <div id="comment_to_detail_link_box"><a href="/items/{{object.target.id}}/" class="btn btn-light btn-sm" style=" padding: 0rem 0.2rem;"><small id="comment_to_detail_link">{{ object.target}}</small></a></div>
       </div>
-    </li>
+      <small class="mb-1">{{ object.comment_text| linebreaksbr}}</small>
+    </div>
     {% endif %}
     {% endfor %}
   </ol>
