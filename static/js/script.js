@@ -1,13 +1,8 @@
-console.log("Hello2");
+// 内容
+// - 改行で自動で大きさが変わるtextarea
+// - comment.html commentに紐ずく動画がないときはリンクボタンを非表示にする
 
-// エンターキーの無効化 エンターキーでformを送信するのを防ぐ
-// document.onkeypress = function(e) {
-//   // エンターキーだったら無効にする
-//   if (e.key === 'Enter') {
-//     return false;
-//   }
-// }
-
+console.log("Hello Start");
 
 // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 // 改行で自動で大きさが変わるtextarea ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
@@ -23,7 +18,7 @@ window.addEventListener('load', function() {
     // textarea要素
     const $textarea = document.getElementById("id_description");
 
-    // textareaそ要素のlineheight
+    // textarea要素のlineheight
     let lineHeight = getComputedStyle($textarea).lineHeight;
     // "19.6px" のようなピクセル値が返ってくるので、数字だけにする
     lineHeight = lineHeight.replace(/[^-\d\.]/g, '');
@@ -49,6 +44,19 @@ window.addEventListener('load', function() {
   };
 })
 
+// Replyは一つのテンプレートに複数あるので、idを取得して、getElementByIdする
+function resizeReplyTextarea(ele){
+  //- 改行に合わせてテキストエリアのサイズ変更
+  var id_value = ele.id; // eleのプロパティとしてidを取得
+  const PADDING_Y = 20;
+  const $textarea = document.getElementById(id_value);
+  let lineHeight = getComputedStyle($textarea).lineHeight;
+  lineHeight = lineHeight.replace(/[^-\d\.]/g, '');
+  const lines = ($textarea.value + '\n').match(/\n/g).length;
+  $textarea.style.height = lineHeight * lines + PADDING_Y + 'px';
+}
+
+
 
 
 // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
@@ -66,6 +74,7 @@ window.onload = function onLoad() {
   }
 }
 
+console.log("Hello End");
 
 
 // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
@@ -80,7 +89,6 @@ window.onload = function onLoad() {
 
 
 
-console.log("HelloHello");
 
 // function getId(ele){
 //     var id_value = ele.id; // eleのプロパティとしてidを取得
@@ -91,13 +99,23 @@ console.log("HelloHello");
 //   alert("ボタンがクリックされました！");
 // }
 
-function getId(clicked_id) {
-  alert(clicked_id);
-  console.log(clicked_id);
-  var insertBox = 'replyBox_' + clicked_id;
-  const element = document.querySelector(insertBox);
-  element.insertAdjacentHTML('beforeend', '<div>追加テキスト</div>');
-}
+// function getId(clicked_id) {
+//   alert(clicked_id);
+//   console.log(clicked_id);
+//   var insertBox = 'replyBox_' + clicked_id;
+//   const element = document.querySelector(insertBox);
+//   element.insertAdjacentHTML('beforeend', '<div>追加テキスト</div>');
+// }
 
-ボタンを押したら、bootstrapのトーストが表示されて、
-返信フォームが入っているので、viewを動かす
+// ボタンを押したら、bootstrapのトーストが表示されて、
+// 返信フォームが入っているので、viewを動かす
+
+
+
+// エンターキーの無効化 エンターキーでformを送信するのを防ぐ
+// document.onkeypress = function(e) {
+//   // エンターキーだったら無効にする
+//   if (e.key === 'Enter') {
+//     return false;
+//   }
+// }

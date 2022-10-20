@@ -2,11 +2,13 @@ body {
   /* ヘッダー分が隠れないように */
   padding-top: 56px;
 }
+
 .item_detail_basicData {
   padding: 0 0.5rem;
 }
+
 .detail_comment_list {
-  border-bottom: 1px solid rgba(0,0,0,.125);
+  border-bottom: 1px solid rgba(0, 0, 0, .125);
 }
 
 /* ****************************************************** */
@@ -15,7 +17,8 @@ body {
   padding: 0.5rem;
 }
 
-.card-title, .card-text {
+.card-title,
+.card-text {
   margin: 0;
 }
 
@@ -34,10 +37,13 @@ small {
 }
 
 li {
-	list-style-type:none;		/*リストマーカー無しにする*/
+  list-style-type: none;
+  /*リストマーカー無しにする*/
 }
+
 li.page-item::marker {
-  list-style-type:none;		/*リストマーカー無しにする*/
+  list-style-type: none;
+  /*リストマーカー無しにする*/
 }
 
 .accordion-body {
@@ -51,11 +57,10 @@ li.page-item::marker {
   resize: none;
   line-height: 1.5;
   width: 100%;
-  /* padding: 10; */
 }
+
 #id_comment_text {
   resize: none;
   line-height: 1.5;
   width: 100%;
-  /* padding: 10; */
 }

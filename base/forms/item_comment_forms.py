@@ -10,7 +10,7 @@ class CommentCreateForm(forms.ModelForm):
         labels = {'comment_text': '',}
         widgets = {
             'comment_text': forms.Textarea(
-                attrs={'class': 'form-control my-3', 'placeholder': 'コメントする', 'rows':'1', 'oninput':'resizeCommentTextarea();', }),
+                attrs={'class': 'form-control my-3', 'placeholder': 'コメントする', 'rows':'1', 'oninput':'resizeCommentTextarea()', }),
         }
 
 
@@ -19,11 +19,12 @@ class ReplyCreateForm(forms.ModelForm):
     class Meta:
         model = Reply
         fields  = ('comment_text', 'comment_to')
-        labels = {'comment_text': '',}
         widgets = {
-            'comment_text': forms.Textarea(
-                attrs={'class': 'form-control my-3', 'placeholder': '返信する', 'rows':'1', 'oninput':'resizeCommentTextarea();', }),
-            # 'comment_to'は、ForeignKey(Comment)なので、入力しないが、値はテンプレートからviewに運ぶので、非表示としてfieldを作っておく
+            'comment_text': forms.HiddenInput(),
             'comment_to': forms.HiddenInput(),
         }
+
+# ＊＊＊ ReplyCreateFormについて ＊＊＊
+# 'comment_text'は、javascript(テキストエリアの拡大)でCommentIDを使うので、テンプレートでIDを取得しjsに渡すので、ここでは非表示としてfieldを作っておく
+# 'comment_to'は、ForeignKey(Comment)なので、入力しないが、値はテンプレートからviewに運ぶので、非表示としてfieldを作っておく
 

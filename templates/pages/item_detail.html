@@ -86,9 +86,14 @@
                   <!-- 返信コメントフォーム -->
                   <form method="POST">
                     {% csrf_token %}
+                    <!-- このフォームは非表示なので入力されない -->
                     {{ reply_form }}
-                    <!-- 隠しデータを設定しておく部分 -->
+
+                    <!-- comment.idを含んで、処理する部分 -->
+                    <textarea name="comment_text" cols="40" rows="1" class="form-control my-3" placeholder="返信する" oninput="resizeReplyTextarea(this);" maxlength="1000" required="" id="id_comment_text_{{ comment.pk }}"></textarea>
                     <input type="hidden" name="comment_to" value="{{ comment.pk }}">
+
+
                     <div class="text-right my-2">
                       <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
                       <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">コメント送信</button>
