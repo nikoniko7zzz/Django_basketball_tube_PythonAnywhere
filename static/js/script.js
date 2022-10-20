@@ -1,4 +1,4 @@
-console.log("Hello");
+console.log("Hello2");
 
 // エンターキーの無効化 エンターキーでformを送信するのを防ぐ
 // document.onkeypress = function(e) {
@@ -65,3 +65,39 @@ window.onload = function onLoad() {
     }
   }
 }
+
+
+
+// ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+// item_detail.html コメントの返信ボタンを押したら、返信フォームを表示する ＊＊＊＊＊＊＊＊＊
+
+// // 押したボタンのid名取得
+// const hoge = (e) =>{
+//   console.log(e.target.id);
+// }
+
+// btn.addEventListener('click', hoge, false)
+
+
+
+console.log("HelloHello");
+
+// function getId(ele){
+//     var id_value = ele.id; // eleのプロパティとしてidを取得
+//     console.log(id_value); //「id01」
+// }
+
+// function clickDisplayAlert() {
+//   alert("ボタンがクリックされました！");
+// }
+
+function getId(clicked_id) {
+  alert(clicked_id);
+  console.log(clicked_id);
+  var insertBox = 'replyBox_' + clicked_id;
+  const element = document.querySelector(insertBox);
+  element.insertAdjacentHTML('beforeend', '<div>追加テキスト</div>');
+}
+
+ボタンを押したら、bootstrapのトーストが表示されて、
+返信フォームが入っているので、viewを動かす

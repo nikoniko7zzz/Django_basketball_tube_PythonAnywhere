@@ -1,8 +1,8 @@
 # from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
-from base.models import Item, Comment, Tag
+from base.models import Item, Comment, Tag, Reply
 from django.views.generic.edit import ModelFormMixin
-from base.forms import CommentCreateForm, ItemCreateForm
+from base.forms import CommentCreateForm, ItemCreateForm, ReplyCreateForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -47,6 +47,7 @@ class TagListView(IndexListView, ListView):
 #     template_name = 'pages/item.html'
 
 
+
 class ItemDetailView(ModelFormMixin, DetailView):
     """
     個別の動画ページ(item_detail.html)
@@ -56,27 +57,47 @@ class ItemDetailView(ModelFormMixin, DetailView):
     model = Item
     template_name = 'pages/item_detail.html'
     context_object_name = 'item'
-    form_class = CommentCreateForm
+    comment_form_class = CommentCreateForm
+    reply_form_class = ReplyCreateForm
+    fields = ()
+
 
     # no get_context_data override
-
     def post(self, request, *args, **kwargs):
         # first construct the form to avoid using it as instance
-        form = self.get_form() # Formを取得
+        cform = CommentCreateForm(**self.get_form_kwargs()) # Formを取得
+        rform = ReplyCreateForm(**self.get_form_kwargs()) # Formを取得
+        # form = self.get_form() # Formを取得
         self.object = self.get_object() # Itemのこと
 
-        def form_valid(self, form):
+        def cform_valid(self, cform):
             item = get_object_or_404(Item, pk=self.object.pk)
-            comment = form.save(commit=False)
+            comment = cform.save(commit=False)
             comment.target = item
             comment.author = self.request.user
             comment.save()
             return HttpResponseRedirect(self.get_success_url())
 
-        if form.is_valid():
-            return form_valid(self, form)
-        else:
-            return self.form_invalid(form)
+        def rform_valid(self, rform):
+            item = get_object_or_404(Item, pk=self.object.pk)
+            reply = rform.save(commit=False)
+            reply.target = item
+            reply.author = self.request.user
+            reply.save()
+            return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': self.object.pk}))
+
+        if 'CommentFormBtn' in request.POST:
+            print('CommentFormBtnボタン押した')
+            if cform.is_valid():
+                return cform_valid(self, cform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
+        if 'ReplyFormBtn' in request.POST:
+            if rform.is_valid():
+                return rform_valid(self, rform)
+            else:
+                return self.render_to_response(self.get_context_data())
 
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
@@ -87,19 +108,17 @@ class ItemDetailView(ModelFormMixin, DetailView):
         item = get_object_or_404(Item, pk=self.object.pk)
         self.target = item.pk
         context['comment_count'] = Comment.objects.filter(target=self.target).count()
+        comment_form = self.comment_form_class(self.request.GET or None)
+        reply_form = self.reply_form_class(self.request.GET or None)
+        context.update({
+            'comment_form': comment_form,
+            'reply_form':reply_form
+        })
         return context
 
 
-# class ItemCreateView(LoginRequiredMixin, CreateView):
-#     model = Item
-#     form_class = ItemCreateForm
-#     template_name = 'pages/item_create.html'
-#     success_url = reverse_lazy('item_create')
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['add_item_form'] = ItemCreateForm    #ここで定義した変数名
-#         return context
+
 class ItemCreateView(LoginRequiredMixin, CreateView):
     model = Item
     template_name = 'pages/item_create.html'

@@ -7,21 +7,13 @@
 
   <ol class="list-group list-group-numbered">
     {% for object in object_list reversed %}
-    <li class="list-group-item">
-      <div class=" container-fluid">
-        <div class="row justify-content-between">
-          <div class="col-5">
-            <small class="text-muted">{{object.author.profile.name}}</small>
-          </div>
-          <div class="col-7  text-right">
-
-            <small class="text-muted mr-4">{{object.updated_at}}</small>
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-          </div>
-        </div>
-        <p class="mb-1">{{object.comment_text}}</p>
+    <div class="detail_comment_list py-2">
+      <div class="row justify-content-between">
+        <small class="text-muted">{{object.author.profile.name}}</small>
+        <small class="text-muted mr-4">{{ object.updated_at }}</small>
       </div>
-    </li>
+      <small class="mb-1">{{ object.comment_text| linebreaksbr}}</small>
+    </div>
     {% endfor %}
   </ol>
 </div>

@@ -2,7 +2,6 @@ body {
   /* ヘッダー分が隠れないように */
   padding-top: 56px;
 }
-
 .item_detail_basicData {
   padding: 0 0.5rem;
 }

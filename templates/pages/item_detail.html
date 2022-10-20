@@ -25,7 +25,7 @@
           </button>
         </h2>
         <div id="collapseDescription" class="accordion-collapse collapse show" aria-labelledby="headingDescription">
-          <div class="accordion-body">
+          <div class="accordion-body py-2">
             <!-- データを入力時と同じ改行で表示する value | linebreaksbr  -->
             <small class="card-text">{{item.description | linebreaksbr }}</small>
           </div>
@@ -40,50 +40,80 @@
         </h2>
         <div id="collapseCreateComment" class="accordion-collapse collapse" aria-labelledby="headingCreateComment">
           <div class="accordion-body">
+
             <!-- コメント作成用 -->
             <form method="POST">
               {% csrf_token %}
-              {{ form }}
+              {{ comment_form }}
+
               <div class="text-right my-2">
                 <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
-                <button type="submit" class="btn btn-info btn-sm">コメント</button>
+                <button type="submit" class="btn btn-info btn-sm" name="CommentFormBtn">コメント送信</button>
               </div>
             </form>
+
           </div>
         </div>
       </div>
 
       <div class="accordion-item">
-        <h2 class="accordion-header" id="headingListComment">
+        <h2 class="accordion-header " id="headingListComment">
           <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseListComment" aria-expanded="false" aria-controls="collapseListComment">
-            コメントを見る　　{{comment_count}} 件
+            コメントを見る　
+            <span class="badge bg-primary rounded-pill">{{comment_count}}</span>
           </button>
         </h2>
         <div id="collapseListComment" class="accordion-collapse collapse" aria-labelledby="headingListComment">
           <div class="accordion-body">
 
+            <!-- 動画に紐づくコメントを一覧で表示 -->
             {% for comment in item.comment_set.all %}
             <div class="detail_comment_list py-2">
-              <div class="row justify-content-between">
-                <div class="col-5">
+              <div class="row">
+                <div class="col text-left">
                   <small class="text-muted">{{ comment.author.profile.name }}</small>
+
                 </div>
-                <div class="col-7  text-right">
-                  <small class="text-muted mr-4">{{ comment.updated_at }}</small>
+                <div class="col-7 text-right">
+                  <small class="text-muted">{{ comment.updated_at }}</small>
+                  <button type="button" class="btn btn-light btn-sm fs-6" id="{{ comment.id }}" onclick="getId(this.id)">返信</button>
+                </div>
+                <small class=" mb-1">{{ comment.comment_text| linebreaksbr}}</small>
+
+                <!-- 返信コメントの箱 -->
+                <div id="replyBox_{{ comment.id }}">
+
+                  <!-- 返信コメントフォーム -->
+                  <form method="POST">
+                    {% csrf_token %}
+                    {{ reply_form }}
+                    <!-- 隠しデータを設定しておく部分 -->
+                    <input type="hidden" name="comment_to" value="{{ comment.pk }}">
+                    <div class="text-right my-2">
+                      <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
+                      <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">コメント送信</button>
+                    </div>
+                  </form>
+
+                  <!-- コメントに対する、返信コメントの一覧を出力 -->
+                  {% for reply in comment.reply_set.all %}
+                  <p>{{ reply.comment_text | linebreaksbr }}</p>
+                  <p>{{ reply.author }}</p>
+                  <p>{{ reply.created_at }}</p>
+                  {% endfor %}
+
                 </div>
               </div>
-              <small class="mb-1">{{ comment.comment_text| linebreaksbr}}</small>
 
             </div>
             {% endfor %}
-
           </div>
         </div>
+
       </div>
-
+      <i class="fa-regular fa-comment-pen"></i>
     </div>
-    <i class="fa-regular fa-comment-pen"></i>
-  </div>
 
 
-  {% endblock main %}
+
+    {% endblock main %}

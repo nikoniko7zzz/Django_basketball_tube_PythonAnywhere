@@ -13,7 +13,9 @@
         <a class="nav-item nav-link active" href="/">Home</a>
         <a class="nav-link" href="/comment/">Comment</a>
         <a class="nav-link" href="/item/create/">VideoPost</a>
+        {% if user.is_superuser %}
         <a class="nav-link" href="/everyone/">Everyone</a>
+        {% endif %}
         <a class="nav-link" href="/profile/">Profile</a>
         <a class="nav-link" href="/account/">Account</a>
         <!-- ログインしているか、していないかで出しわけ -->
