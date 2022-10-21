@@ -70,55 +70,67 @@
             {% for comment in item.comment_set.all %}
             <div class="detail_comment_list py-2">
               <div class="row">
-                <div class="col text-left">
+                <div class="col-auto me-auto">
                   <small class="text-muted">{{ comment.author.profile.name }}</small>
-
                 </div>
-                <div class="col-7 text-right">
+                <div class="col-auto">
                   <small class="text-muted">{{ comment.updated_at }}</small>
-                  <button type="button" class="btn btn-light btn-sm fs-6" id="{{ comment.id }}" onclick="getId(this.id)">返信</button>
-                </div>
-                <small class=" mb-1">{{ comment.comment_text| linebreaksbr}}</small>
-
-                <!-- 返信コメントの箱 -->
-                <div id="replyBox_{{ comment.id }}">
-
-                  <!-- 返信コメントフォーム -->
-                  <form method="POST">
-                    {% csrf_token %}
-                    <!-- このフォームは非表示なので入力されない -->
-                    {{ reply_form }}
-
-                    <!-- comment.idを含んで、処理する部分 -->
-                    <textarea name="comment_text" cols="40" rows="1" class="form-control my-3" placeholder="返信する" oninput="resizeReplyTextarea(this);" maxlength="1000" required="" id="id_comment_text_{{ comment.pk }}"></textarea>
-                    <input type="hidden" name="comment_to" value="{{ comment.pk }}">
-
-
-                    <div class="text-right my-2">
-                      <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
-                      <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">コメント送信</button>
-                    </div>
-                  </form>
-
-                  <!-- コメントに対する、返信コメントの一覧を出力 -->
-                  {% for reply in comment.reply_set.all %}
-                  <p>{{ reply.comment_text | linebreaksbr }}</p>
-                  <p>{{ reply.author }}</p>
-                  <p>{{ reply.created_at }}</p>
-                  {% endfor %}
-
+                  <div id="panelsStayOpen-heading_{{ comment.pk }}" class="inline_block">
+                    <button type="button" class="btn btn-light btn-sm fs-6" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse_{{ comment.pk }}" aria-expanded="false" aria-controls="panelsStayOpen-collapse_{{ comment.pk }}" style="font-size: 0.2rem;">返信</button>
+                  </div>
                 </div>
               </div>
+              <small class=" mb-1">{{ comment.comment_text| linebreaksbr}}</small>
 
+              <!-- 返信コメントの箱 -->
+              <div id="panelsStayOpen-collapse_{{ comment.pk }}" class=" collapse" aria-labelledby="panelsStayOpen-heading_{{ comment.pk }}">
+
+                <!-- 返信コメントフォーム -->
+                <form method="POST">
+                  {% csrf_token %}
+                  <!-- このフォームは非表示なので入力されない -->
+                  {{ reply_form }}
+
+                  <!-- comment.idを含んで、処理する部分 -->
+                  <textarea name="comment_text" cols="40" rows="1" class="form-control my-3" placeholder="返信する" oninput="resizeReplyTextarea(this);" maxlength="1000" required="" id="id_comment_text_{{ comment.pk }}"></textarea>
+                  <input type="hidden" name="comment_to" value="{{ comment.pk }}">
+
+
+                  <div class="text-right my-2">
+                    <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
+                    <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">コメント送信</button>
+                  </div>
+                </form>
+
+                <!-- コメントに対する、返信コメントの一覧を出力 -->
+                <div class="container bg-light mt-2 py-2">
+                  {% for reply in comment.reply_set.all %}
+                  <div class="my-3">
+                    <div class="row">
+                      <div class="col-auto me-auto">
+                        <small>{{ reply.author.profile.name }}</small>
+                      </div>
+                      <div class="col-auto">
+                        <small>{{ reply.created_at }}</small>
+                      </div>
+                    </div>
+                    <small>{{ reply.comment_text | linebreaksbr }}</small>
+                  </div>
+                  {% endfor %}
+                </div>
+
+              </div>
             </div>
+
             {% endfor %}
           </div>
         </div>
-
       </div>
-      <i class="fa-regular fa-comment-pen"></i>
+
     </div>
+    <i class="fa-regular fa-comment-pen"></i>
+  </div>
 
 
 
-    {% endblock main %}
+  {% endblock main %}
