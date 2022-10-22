@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="container my-5">
+  <div class="col-12">
+    <h1>
+      動画削除
+    </h1>
+    <form method="POST">
+      {% csrf_token %}
+      <label>Youtube ID:</label>
+      <input type="text" class="form-control mb-3  col-md-4" placeholder="{{ object.youtube_url }}" disabled>
+
+      <label>タグ:</label>
+      <input type="text" class="form-control mb-3  col-md-4" placeholder="{{ object.tag }}" disabled>
+
+      <label>撮影日:</label>
+      <input type="text" class="form-control mb-3  col-md-4" placeholder="{{ object.shooting_date }}" disabled>
+
+      <label>動画タイトル:</label>
+      <input type="text" class="form-control mb-3" placeholder="{{ object.title }}" disabled>
+
+      <label>動画説明:</label>
+      <textarea rows="3" class="form-control mb-3" placeholder="{{ object.description | linebreaksbr }}" disabled></textarea>
+
+      <div class="text-right mb-3">
+        <button type="submit" class="btn btn-danger btm-sm">削除</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

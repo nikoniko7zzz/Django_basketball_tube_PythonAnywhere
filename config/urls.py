@@ -24,6 +24,9 @@ urlpatterns = [
     path('', views.IndexListView.as_view()),  # トップページ
     path('comment/', views.CommentListView.as_view(), name="comment"),  # 自分のコメントページ
     path('item/create/', views.ItemCreateView.as_view(), name="item_create"),  # 動画投稿ページ
+    path('item/list/', views.ItemListView.as_view(), name="item_list"),  # 動画一覧(作業用)ページ
+    path('item/update/<str:pk>/', views.ItemUpdateView.as_view(), ),  # 動画編集(作業用)ページ
+    path('item/delete/<str:pk>/', views.ItemDeleteView.as_view(), ),  # 動画削除(作業用)ページ
     path('everyone/', views.EveryoneCommentListView.as_view()),  # 自分のコメントページ
     path('items/<str:pk>/', views.ItemDetailView.as_view(), name="item_detail"),
     path('tags/<str:pk>/', views.TagListView.as_view()), # 選択タグの動画表示

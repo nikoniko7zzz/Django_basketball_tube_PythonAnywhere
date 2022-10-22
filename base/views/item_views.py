@@ -1,5 +1,5 @@
 # from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from base.models import Item, Comment, Tag, Reply
 from django.views.generic.edit import ModelFormMixin
 from base.forms import CommentCreateForm, ItemCreateForm, ReplyCreateForm
@@ -119,6 +119,20 @@ class ItemDetailView(ModelFormMixin, DetailView):
 
 
 
+
+#動画一覧画面
+class ItemListView(LoginRequiredMixin, ListView):
+    model = Item
+    #レコード情報をテンプレートに渡すオブジェクト
+    context_object_name = "item_list"
+    template_name = 'pages/item_list.html'
+
+    def get_queryset(self):
+        # アップデート順に表示 新しいのが上
+        return Item.objects.filter().order_by('-updated_at')
+
+
+# 動画登録画面
 class ItemCreateView(LoginRequiredMixin, CreateView):
     model = Item
     template_name = 'pages/item_create.html'
@@ -129,8 +143,23 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         item = form.save(commit=False)
         item.author = self.request.user
         item.save()
-        return HttpResponseRedirect(reverse('item_create'))
+        return HttpResponseRedirect(reverse('item_list'))
 
+
+#編集画面
+class ItemUpdateView(LoginRequiredMixin, UpdateView):
+    model = Item
+    template_name = 'pages/item_create.html'
+    form_class = ItemCreateForm
+    success_url = reverse_lazy('item_list') # 更新後のページを返す
+
+
+#削除画面
+class ItemDeleteView(LoginRequiredMixin, DeleteView):
+    model = Item
+    template_name = 'pages/item_delete.html'
+    fields  = ('youtube_url', 'tag', 'shooting_date', 'title', 'description')
+    success_url = reverse_lazy('item_list') #削除後のリダイレクト先
 
 
 # class CommentListView(ListView):
