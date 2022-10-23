@@ -10,18 +10,7 @@
       <h1>Profile</h1>
       <form method="POST">
         {% csrf_token %}
-        <div class="mb-3">
-          <label>Name</label>
-          <input class="form-control" type="text" name="name" placeholder="name" value="{{user.profile.name}}">
-        </div>
-        <div class="mb-3">
-          <label>Tel</label>
-          <input class="form-control" type="tel" name="tel" placeholder="tel" value="{{user.profile.tel}}">
-        </div>
-        <div class="mb-3">
-          <label>Birthday</label>
-          <input class="form-control" type="date" name="birthday" placeholder="birthday" value="{{user.profile.birth_day}}">
-        </div>
+        {{form}}
         <div class="text-right col-md-4">
           <button type="submit" class="btn btn-info btm-sm">Save</button>
         </div>

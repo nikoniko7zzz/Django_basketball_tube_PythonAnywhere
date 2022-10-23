@@ -9,10 +9,37 @@
     {% for object in object_list reversed %}
     <div class="detail_comment_list py-2">
       <div class="row justify-content-between">
-        <small class="text-muted">{{object.author.profile.name}}</small>
-        <small class="text-muted mr-4">{{ object.updated_at }}</small>
+        <div class="row">
+          <div class="col-auto me-auto">
+            <small>{{ object.author.profile.name }}</small>
+          </div>
+          <div class="col-auto">
+            <small>{{ object.updated_at }}</small>
+          </div>
+        </div>
+
+        <div id="comment_to_detail_link_box"><a href="/items/{{object.target.id}}/" class="btn btn-light btn-sm" style=" padding: 0rem 0.2rem;"><small id="comment_to_detail_link">{{ object.target}}</small></a></div>
       </div>
-      <small class="mb-1">{{ object.comment_text| linebreaksbr}}</small>
+      <small class="mb-1">{{ object.comment_text | linebreaksbr }}</small>
+      <!-- コメントに対する、返信コメントの一覧を出力 -->
+      <div>
+        {% for reply in object.reply_set.all %}
+        <div class="container bg-light mt-2 py-2 reply_box">
+          <div class="my-3">
+            <div class="row">
+              <div class="col-auto me-auto">
+                <small>{{ reply.author.profile.name }}</small>
+              </div>
+              <div class="col-auto">
+                <small>{{ reply.created_at }}</small>
+              </div>
+            </div>
+            <small>{{ reply.comment_text | linebreaksbr }}</small>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
     </div>
     {% endfor %}
   </ol>

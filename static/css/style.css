@@ -16,6 +16,17 @@ body {
   /* インラインブロック要素にする */
 }
 
+/* プロフィールのカレンダー */
+.inline_block_select {
+  width: auto;
+  display: inline-block;
+  /* インラインブロック要素にする */
+}
+
+.reply_box:empty {
+  display: none;
+}
+
 /* ****************************************************** */
 /* bootstrapのclass */
 .card-body {

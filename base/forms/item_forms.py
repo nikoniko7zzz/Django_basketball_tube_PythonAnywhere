@@ -14,7 +14,7 @@ class ItemCreateForm(forms.ModelForm):
             'youtube_url': forms.TextInput(
                 attrs={'class': 'form-control mb-3  col-md-4', 'placeholder': '英数字11文字 (https://youtu.be/ここの部分)',}),
             'tag': forms.Select(
-                attrs={'class': 'form-control mb-3 col-md-4',}),
+                attrs={'class': 'form-select mb-3 col-md-4',}),
             'shooting_date': forms.DateTimeInput(
                 attrs={'class': 'form-control mb-3  col-md-4','type':'date',}),
             'title': forms.TextInput(

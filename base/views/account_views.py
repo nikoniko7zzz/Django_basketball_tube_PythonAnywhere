@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin # ログインしている人だけ
 from django.contrib.auth import get_user_model
 from base.models import Profile
-from base.forms import UserCreationForm
+from base.forms import UserCreationForm, ProfileCreateForm
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
@@ -39,7 +39,8 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     template_name = 'pages/profile.html'
-    fields = ('name', 'tel', 'birth_day')
+    form_class = ProfileCreateForm
+    # fields = ('name', 'tel', 'birth_day')
     success_url = '/profile/'
 
     def get_object(self):

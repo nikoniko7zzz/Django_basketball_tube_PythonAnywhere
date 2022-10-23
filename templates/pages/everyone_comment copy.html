@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+
+<div class="container my-2">
+
+  <ol class="list-group list-group-numbered">
+    {% for object in object_list reversed %}
+    <div class="detail_comment_list py-2">
+      <div class="row justify-content-between">
+        <small class="text-muted">{{object.author.profile.name}}</small>
+        <small class="text-muted mr-4">{{ object.updated_at }}</small>
+      </div>
+      <small class="mb-1">{{ object.comment_text| linebreaksbr}}</small>
+    </div>
+    {% endfor %}
+  </ol>
+</div>
+
+{% endblock main %}

@@ -61,7 +61,6 @@ function resizeReplyTextarea(ele){
 
 // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 // comment.html commentに紐ずく動画がないときはリンクボタンを非表示にする ＊＊＊＊＊＊＊＊＊
-
 window.onload = function onLoad() {
   var link = document.querySelectorAll("#comment_to_detail_link");
   var linkBox = document.querySelectorAll("#comment_to_detail_link_box");
@@ -73,6 +72,20 @@ window.onload = function onLoad() {
     }
   }
 }
+
+// ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+// comment.html ボタンの内容のテキストをtextareaのカーソル位置に挿入 ＊＊＊＊＊＊＊＊＊＊＊＊
+function addText(e){
+	//テキストエリアと挿入する文字列を取得
+	var area = document.getElementById('id_comment_text');
+  // var btn_value = btn.id; // eleのプロパティとしてidを取得
+	var text = e.value;
+	//カーソルの位置を基準に前後を分割して、その間に文字列を挿入
+	area.value = area.value.substr(0, area.selectionStart)
+			+ text
+			+ area.value.substr(area.selectionStart);
+}
+
 
 console.log("Hello End");
 
