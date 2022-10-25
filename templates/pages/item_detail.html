@@ -63,6 +63,8 @@
             <span class="badge bg-primary rounded-pill">{{comment_count}}</span>
           </button>
         </h2>
+
+
         <div id="collapseListComment" class="accordion-collapse collapse" aria-labelledby="headingListComment">
           <div class="accordion-body">
 
@@ -77,6 +79,8 @@
                   <small class="text-muted">{{ comment.updated_at }}</small>
                   <div id="panelsStayOpen-heading_{{ comment.pk }}" class="inline_block">
                     <button type="button" class="btn btn-light btn-sm fs-6" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse_{{ comment.pk }}" aria-expanded="false" aria-controls="panelsStayOpen-collapse_{{ comment.pk }}" style="font-size: 0.2rem;">返信</button>
+                    <!-- コメントに紐づく返信コメントの数 -->
+                    <span class="badge bg-primary rounded-pill">{{comment.reply_set.all.count}}</span>
                   </div>
                 </div>
               </div>
@@ -98,7 +102,7 @@
 
                   <div class="text-right my-2">
                     <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
-                    <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">コメント送信</button>
+                    <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">返信 送信</button>
                   </div>
                 </form>
 

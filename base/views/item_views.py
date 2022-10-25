@@ -7,6 +7,10 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin # ログインしている人だけ
+from base.models import Profile
+import datetime
+from dateutil import relativedelta
+
 
 
 
@@ -107,7 +111,8 @@ class ItemDetailView(ModelFormMixin, DetailView):
         context = super().get_context_data(*args, **kwargs)
         item = get_object_or_404(Item, pk=self.object.pk)
         self.target = item.pk
-        context['comment_count'] = Comment.objects.filter(target=self.target).count()
+
+        context['comment_count'] = Comment.objects.filter(target=self.target).count() # これもテンプレートで集計でもいいな
         comment_form = self.comment_form_class(self.request.GET or None)
         reply_form = self.reply_form_class(self.request.GET or None)
         context.update({
@@ -194,58 +199,106 @@ class CommentListView(LoginRequiredMixin, ModelFormMixin, ListView):
         else:
             return self.form_invalid(form)
 
+    def get_queryset(self):
+        # アップデート順に表示 新しいのが上
+        return Comment.objects.filter().order_by('-updated_at')
+
 
 class EveryoneCommentListView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'pages/everyone_comment.html'
 
-    # def get_success_url(self):
-    #     return reverse_lazy('comment')
 
-'''
-class ItemDetailView(ModelFormMixin, DetailView)を作るにあたり参考にしたサイト
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
 
-    - [参考url:詳細ビューとフォーム Mixin django の混合に関する問題](https://stackoverflow.com/questions/66503703/problem-with-mixing-detail-view-and-form-mixin-django)
-    - [参考url:DjangoGithub](https://github.com/django/django/blob/3.0/django/views/generic/edit.py#L70)
-    - [参考url:[Django] FormViewについて詳しく見てみる](https://e-tec-memo.herokuapp.com/article/285/)
-    - [参考url:Djangoのクラスベースビューを完全に理解する](https://www.membersedge.co.jp/blog/completely-guide-for-django-class-based-views/)
+        # ユーザーの名前を返す(抽出条件用)
+        profiles = Profile.objects.all()
+        context['profiles'] = profiles
+
+        # 検索条件でgetした値をテンプレートに返す
+        if self.request.GET.get('select_profile_pk'):
+            profile_pk = self.request.GET.get('select_profile_pk')
+            if profile_pk == 'profile_all':
+                context['profile_name'] = 'すべて'
+            else:
+                profile = get_object_or_404(Profile, pk=profile_pk)
+                context['profile_name'] = profile.name
+        else:
+            context['profile_name'] = 'すべて'
+
+        if self.request.GET.get('select_period'):
+            select_period = self.request.GET.get('select_period')
+            name_dic = {
+                'today_select': '今日',
+                'yesterday_select': '昨日',
+                'one_week_before': '１週間以内',
+                'one_month_before': '１ヶ月以内',
+                'one_year_before': '１年以内',
+                'all_select': 'すべて',
+            }
+            context['period_name'] = name_dic[select_period]
+        else:
+            context['period_name'] = 'すべて'
+
+        return context
 
 
 
-if form.is_valid():
-    return form_valid(self, form) # selfはつかないMy仕様で作成
-else:
-    return self.form_invalid(form)
+    def get_queryset(self):
+        q_profile_pk = self.request.GET.get('select_profile_pk')
+        q_period = self.request.GET.get('select_period')
 
-***  解説  Djangoの動き(Dcuより)  ***
-if form.is_valid():
-    取得したFormのis_validを呼んで入力が正しいか検証して、
-    正しければform_validメソッドを、
-    何か不備があればform_invalidメソッドを呼ぶ
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        week = today - datetime.timedelta(weeks=1)
+        month = today - relativedelta.relativedelta(months=1)
+        year = today - relativedelta.relativedelta(years=1)
+        date_dic = {
+            'today_select': today, # 今日
+            'yesterday_select': yesterday, # 昨日
+            'one_week_before': week, # １週間以内
+            'one_month_before': month, # １ヶ月以内
+            'one_year_before': year, # １年以内
+        }
 
-return form_valid(self, form)
-    - 仕様の'self.form_valid(form)'の場合のDjangoの動き(Dcuより)
+            # object_list = ReportModel.objects.filter(date_start__gte=date_min).order_by('date_start')
 
-        # class FormMixinの時
-        def form_valid(self, form)::
-            """フォームが有効な場合、指定されたURLにリダイレクトします"""
-            return HttpResponseRedirect(self.get_success_url())
+        # 条件に名前と日付の両方がある時
+        if q_profile_pk and q_period:
+            if q_profile_pk == 'profile_all' and q_period == 'all_select':
+                object_list = Comment.objects.all().order_by('-created_at')
+            elif q_profile_pk == 'profile_all':
+                object_list = Comment.objects.filter(created_at__gte=date_dic[q_period]).order_by('-created_at')
+            elif q_period == 'all_select':
+                object_list = Comment.objects.filter(author=q_profile_pk).order_by('-created_at')
+            else:
+                object_list = Comment.objects.filter(author=q_profile_pk, created_at__gte=date_dic[q_period]).order_by('-created_at')
 
-        # class ModelFormMixin(FormMixin, SingleObjectMixin):の時
-        def form_valid(self, form):
-            """フォームが有効な場合、関連するモデルを保存する"""
-            self.object = form.save()
-            return super().form_valid(form)
 
-        つまり、フォームが有効な場合、
-        1. 関連するモデルを保存し
-        2. 指定されたURLにリダイレクトします
+        # 条件に名前と日付のどちらかががある時、またどちらもない時
+        else:
+            # 条件に名前だけの時
+            if q_profile_pk:
+                if q_profile_pk == 'profile_all':
+                    object_list = Comment.objects.all().order_by('-created_at')
+                else:
+                    object_list = Comment.objects.filter(author=q_profile_pk).order_by('-created_at')
 
-    - 自作の 'form_valid(self, form)'を使う理由
-        Commentモデルのauthorとtargetを一緒にsaveしたかったから
+            # 条件に日付だけの時
+            elif q_period:
+                if q_period == 'all_select':
+                    object_list = Comment.objects.all().order_by('-created_at')
+                else:
+                    object_list = Comment.objects.filter(created_at__gte=date_dic[q_period]).order_by('-created_at')
+            # どちらもない時
+            else:
+                object_list = Comment.objects.all().order_by('-created_at')
 
-return self.form_invalid(form)
-    def form_invalid(self, form):
-        """フォームが無効な場合、無効なフォームをレンダリングする"""
-        return self.render_to_response(self.get_context_data(form=form))
-'''
+        return object_list
+
+
+
+
+#指定日以上
+# object_list = ReportModel.objects.filter(date_start__gte=date_min).order_by('date_start')

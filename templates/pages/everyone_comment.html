@@ -4,45 +4,55 @@
 
 
 <div class="container my-2">
+  <form method="get" action="">
+    <legend>絞り込み条件</legend>
+    <div class="row">
 
-  <ol class="list-group list-group-numbered">
-    {% for object in object_list reversed %}
-    <div class="detail_comment_list py-2">
-      <div class="row justify-content-between">
-        <div class="row">
-          <div class="col-auto me-auto">
-            <small>{{ object.author.profile.name }}</small>
-          </div>
-          <div class="col-auto">
-            <small>{{ object.updated_at }}</small>
-          </div>
-        </div>
-
-        <div id="comment_to_detail_link_box"><a href="/items/{{object.target.id}}/" class="btn btn-light btn-sm" style=" padding: 0rem 0.2rem;"><small id="comment_to_detail_link">{{ object.target}}</small></a></div>
+      <div class="col-auto">
+        <select name="select_profile_pk" class="form-select mb-2">
+          <option value="" selected="">名前を選んでください</option>
+          <option value="profile_all">すべて</option>
+          <!-- ユーザーの名前だけを表示 -->
+          {% for profile in profiles %}
+          <option value="{{ profile.pk }}">{{ profile.name }}</option>
+          {% endfor %}
+        </select>
+        <div class="col-auto"><label>名前：{{ profile_name }}</label></div>
       </div>
-      <small class="mb-1">{{ object.comment_text | linebreaksbr }}</small>
-      <!-- コメントに対する、返信コメントの一覧を出力 -->
-      <div>
-        {% for reply in object.reply_set.all %}
-        <div class="container bg-light mt-2 py-2 reply_box">
-          <div class="my-3">
-            <div class="row">
-              <div class="col-auto me-auto">
-                <small>{{ reply.author.profile.name }}</small>
-              </div>
-              <div class="col-auto">
-                <small>{{ reply.created_at }}</small>
-              </div>
-            </div>
-            <small>{{ reply.comment_text | linebreaksbr }}</small>
-          </div>
-        </div>
-        {% endfor %}
+      <div class="col-auto">
+        <select name="select_period" class="form-select mb-2">
+          <option value="" selected="">日付を選択してください</option>
+          <option value="today_select">今日</option>
+          <option value="yesterday_select">昨日</option>
+          <option value="one_week_before">１週間以内</option>
+          <option value="one_month_before">１ヶ月以内</option>
+          <option value="one_year_before">１年以内</option>
+          <option value="all_select">すべて</option>
+        </select>
+        <div class="col-auto"><label>期間：{{ period_name }}</label></div>
       </div>
-
+      <div class="text-right col-auto">
+        <button type="submit" class="btn btn-info btm-sm">検索</button>
+      </div>
     </div>
+
+  </form>
+</div>
+
+
+
+
+<!-- 全てのコメントの一覧 -->
+<div class="container my-2">
+  <ol class="list-group list-group-numbered">
+    {% for object in object_list %}
+
+    <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
+    {% include 'snippets/comment_box.html' %}
+
     {% endfor %}
   </ol>
 </div>
+
 
 {% endblock main %}
