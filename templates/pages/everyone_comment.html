@@ -5,23 +5,23 @@
 
 <div class="container my-2">
   <form method="get" action="">
+    {% csrf_token %}
     <legend>絞り込み条件</legend>
     <div class="row">
 
       <div class="col-auto">
         <select name="select_profile_pk" class="form-select mb-2">
-          <option value="" selected="">名前を選んでください</option>
-          <option value="profile_all">すべて</option>
+          <option value="{{ s_profile_pk }}" selected="">{{ s_profile_name }}</option>
+          <option value="all_select">すべて</option>
           <!-- ユーザーの名前だけを表示 -->
           {% for profile in profiles %}
           <option value="{{ profile.pk }}">{{ profile.name }}</option>
           {% endfor %}
         </select>
-        <div class="col-auto"><label>名前：{{ profile_name }}</label></div>
       </div>
       <div class="col-auto">
-        <select name="select_period" class="form-select mb-2">
-          <option value="" selected="">日付を選択してください</option>
+        <select name="select_period_key" class="form-select mb-2">
+          <option value="{{ s_period_key }}" selected="">{{ s_period }}</option>
           <option value="today_select">今日</option>
           <option value="yesterday_select">昨日</option>
           <option value="one_week_before">１週間以内</option>
@@ -29,7 +29,6 @@
           <option value="one_year_before">１年以内</option>
           <option value="all_select">すべて</option>
         </select>
-        <div class="col-auto"><label>期間：{{ period_name }}</label></div>
       </div>
       <div class="text-right col-auto">
         <button type="submit" class="btn btn-info btm-sm">検索</button>
@@ -38,8 +37,6 @@
 
   </form>
 </div>
-
-
 
 
 <!-- 全てのコメントの一覧 -->

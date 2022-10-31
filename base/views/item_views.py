@@ -208,27 +208,27 @@ class EveryoneCommentListView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'pages/everyone_comment.html'
 
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        # ユーザーの名前を返す(抽出条件用)
+        # ユーザーの名前を返す(抽出条件select用)
         profiles = Profile.objects.all()
         context['profiles'] = profiles
 
-        # 検索条件でgetした値をテンプレートに返す
+        # 検索条件の名前の値をsessionに保存する
         if self.request.GET.get('select_profile_pk'):
             profile_pk = self.request.GET.get('select_profile_pk')
-            if profile_pk == 'profile_all':
-                context['profile_name'] = 'すべて'
+            if profile_pk == 'all_select':
+                self.request.session['s_profile_pk'] = profile_pk
+                self.request.session['s_profile_name'] = 'すべて'
             else:
-                profile = get_object_or_404(Profile, pk=profile_pk)
-                context['profile_name'] = profile.name
-        else:
-            context['profile_name'] = 'すべて'
+                profile = Profile.objects.get(pk=profile_pk)
+                self.request.session['s_profile_pk'] = profile_pk
+                self.request.session['s_profile_name'] = profile.name
 
-        if self.request.GET.get('select_period'):
-            select_period = self.request.GET.get('select_period')
+        # 検索条件の日付の値をsessionに保存する
+        if self.request.GET.get('select_period_key'):
+            select_period = self.request.GET.get('select_period_key')
             name_dic = {
                 'today_select': '今日',
                 'yesterday_select': '昨日',
@@ -237,18 +237,20 @@ class EveryoneCommentListView(LoginRequiredMixin, ListView):
                 'one_year_before': '１年以内',
                 'all_select': 'すべて',
             }
-            context['period_name'] = name_dic[select_period]
-        else:
-            context['period_name'] = 'すべて'
+            self.request.session['s_period_key']= select_period
+            self.request.session['s_period']= name_dic[select_period]
+
+        # sessionの値をテンプレートにかえす
+        context['s_profile_pk'] = self.request.session['s_profile_pk']
+        context['s_profile_name'] = self.request.session['s_profile_name']
+        context['s_period_key'] = self.request.session['s_period_key']
+        context['s_period'] = self.request.session['s_period']
 
         return context
 
 
-
     def get_queryset(self):
-        q_profile_pk = self.request.GET.get('select_profile_pk')
-        q_period = self.request.GET.get('select_period')
-
+        # 出力期間を算出する、辞書で呼び出し
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
         week = today - datetime.timedelta(weeks=1)
@@ -262,43 +264,36 @@ class EveryoneCommentListView(LoginRequiredMixin, ListView):
             'one_year_before': year, # １年以内
         }
 
-            # object_list = ReportModel.objects.filter(date_start__gte=date_min).order_by('date_start')
+        # sessionにデータがない時は初期設定に'すべて'という文字を指定
+        if not 's_profile_pk' in self.request.session:
+            self.request.session['s_profile_pk']= 'all_select'
+            self.request.session['s_profile_name']= 'すべて'
+        if not 's_period_key' in self.request.session:
+            self.request.session['s_period_key']= 'all_select'
+            self.request.session['s_period']= 'すべて'
 
-        # 条件に名前と日付の両方がある時
-        if q_profile_pk and q_period:
-            if q_profile_pk == 'profile_all' and q_period == 'all_select':
-                object_list = Comment.objects.all().order_by('-created_at')
-            elif q_profile_pk == 'profile_all':
-                object_list = Comment.objects.filter(created_at__gte=date_dic[q_period]).order_by('-created_at')
-            elif q_period == 'all_select':
-                object_list = Comment.objects.filter(author=q_profile_pk).order_by('-created_at')
-            else:
-                object_list = Comment.objects.filter(author=q_profile_pk, created_at__gte=date_dic[q_period]).order_by('-created_at')
-
-
-        # 条件に名前と日付のどちらかががある時、またどちらもない時
+        # self.request.GET.get(検索値)がないものは、sessionの値を検索値に入れる
+        if self.request.GET.get('select_profile_pk') and self.request.GET.get('select_period_key'):
+            q_profile_pk = self.request.GET.get('select_profile_pk')
+            q_period_key = self.request.GET.get('select_period_key')
+        elif self.request.GET.get('select_profile_pk'):
+            q_profile_pk = self.request.GET.get('select_profile_pk')
+            q_period_key = self.request.session['s_period_key']
+        elif self.request.GET.get('select_period_key'):
+            q_profile_pk = self.request.session['s_profile_pk']
+            self.request.GET.get('select_period_key')
         else:
-            # 条件に名前だけの時
-            if q_profile_pk:
-                if q_profile_pk == 'profile_all':
-                    object_list = Comment.objects.all().order_by('-created_at')
-                else:
-                    object_list = Comment.objects.filter(author=q_profile_pk).order_by('-created_at')
+            q_profile_pk = self.request.session['s_profile_pk']
+            q_period_key = self.request.session['s_period_key']
 
-            # 条件に日付だけの時
-            elif q_period:
-                if q_period == 'all_select':
-                    object_list = Comment.objects.all().order_by('-created_at')
-                else:
-                    object_list = Comment.objects.filter(created_at__gte=date_dic[q_period]).order_by('-created_at')
-            # どちらもない時
-            else:
-                object_list = Comment.objects.all().order_by('-created_at')
+        # 検索値に応じてobject_listの作成
+        if q_profile_pk == 'all_select' and q_period_key == 'all_select' :
+            object_list = Comment.objects.all().order_by('-created_at')
+        elif q_profile_pk == 'all_select':
+            object_list = Comment.objects.filter(created_at__gte=date_dic[q_period_key]).order_by('-created_at')
+        elif q_period_key == 'all_select':
+            object_list = Comment.objects.filter(author=q_profile_pk).order_by('-created_at')
+        else:
+            object_list = Comment.objects.filter(author=q_profile_pk, created_at__gte=date_dic[q_period_key]).order_by('-created_at')
 
         return object_list
-
-
-
-
-#指定日以上
-# object_list = ReportModel.objects.filter(date_start__gte=date_min).order_by('date_start')
