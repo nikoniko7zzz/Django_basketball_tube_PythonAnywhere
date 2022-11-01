@@ -8,8 +8,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin # ログインしている人だけ
 from base.models import Profile
-import datetime
-from dateutil import relativedelta
+from base.views import func_dic # オリジナル関数ファイル
+from base.views import search_condition as sc # オリジナル関数ファイル
 
 
 
@@ -91,7 +91,7 @@ class ItemDetailView(ModelFormMixin, DetailView):
             return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': self.object.pk}))
 
         if 'CommentFormBtn' in request.POST:
-            print('CommentFormBtnボタン押した')
+            # print('CommentFormBtnボタン押した')
             if cform.is_valid():
                 return cform_valid(self, cform)
             else:
@@ -211,90 +211,34 @@ class EveryoneCommentListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-
         # ユーザーの名前を返す(抽出条件select用)
         profiles = Profile.objects.all()
         context['profiles'] = profiles
-
-        # 検索条件の名前の値をsessionに保存する
-        if self.request.GET.get('select_profile_pk'):
-            profile_pk = self.request.GET.get('select_profile_pk')
-            if profile_pk == 'all_select':
-                self.request.session['s_profile_pk'] = profile_pk
-                self.request.session['s_profile_name'] = 'すべて'
-            else:
-                profile = Profile.objects.get(pk=profile_pk)
-                self.request.session['s_profile_pk'] = profile_pk
-                self.request.session['s_profile_name'] = profile.name
-
-        # 検索条件の日付の値をsessionに保存する
-        if self.request.GET.get('select_period_key'):
-            select_period = self.request.GET.get('select_period_key')
-            name_dic = {
-                'today_select': '今日',
-                'yesterday_select': '昨日',
-                'one_week_before': '１週間以内',
-                'one_month_before': '１ヶ月以内',
-                'one_year_before': '１年以内',
-                'all_select': 'すべて',
-            }
-            self.request.session['s_period_key']= select_period
-            self.request.session['s_period']= name_dic[select_period]
-
+        # 検索条件の(名前と日付)をsessionに保存する
+        sc.save_search_conditions(self)
         # sessionの値をテンプレートにかえす
         context['s_profile_pk'] = self.request.session['s_profile_pk']
         context['s_profile_name'] = self.request.session['s_profile_name']
         context['s_period_key'] = self.request.session['s_period_key']
         context['s_period'] = self.request.session['s_period']
-
         return context
 
-
     def get_queryset(self):
-        # 出力期間を算出する、辞書で呼び出し
-        today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days=1)
-        week = today - datetime.timedelta(weeks=1)
-        month = today - relativedelta.relativedelta(months=1)
-        year = today - relativedelta.relativedelta(years=1)
-        date_dic = {
-            'today_select': today, # 今日
-            'yesterday_select': yesterday, # 昨日
-            'one_week_before': week, # １週間以内
-            'one_month_before': month, # １ヶ月以内
-            'one_year_before': year, # １年以内
-        }
-
         # sessionにデータがない時は初期設定に'すべて'という文字を指定
-        if not 's_profile_pk' in self.request.session:
-            self.request.session['s_profile_pk']= 'all_select'
-            self.request.session['s_profile_name']= 'すべて'
-        if not 's_period_key' in self.request.session:
-            self.request.session['s_period_key']= 'all_select'
-            self.request.session['s_period']= 'すべて'
+        sc.initial_setting_session(self)
 
         # self.request.GET.get(検索値)がないものは、sessionの値を検索値に入れる
-        if self.request.GET.get('select_profile_pk') and self.request.GET.get('select_period_key'):
-            q_profile_pk = self.request.GET.get('select_profile_pk')
-            q_period_key = self.request.GET.get('select_period_key')
-        elif self.request.GET.get('select_profile_pk'):
-            q_profile_pk = self.request.GET.get('select_profile_pk')
-            q_period_key = self.request.session['s_period_key']
-        elif self.request.GET.get('select_period_key'):
-            q_profile_pk = self.request.session['s_profile_pk']
-            self.request.GET.get('select_period_key')
-        else:
-            q_profile_pk = self.request.session['s_profile_pk']
-            q_period_key = self.request.session['s_period_key']
+        q_dic = sc.set_query_to_request_or_session(self)
+        q_profile_pk = q_dic['q_profile_pk']
+        q_period_key = q_dic['q_period_key']
 
         # 検索値に応じてobject_listの作成
         if q_profile_pk == 'all_select' and q_period_key == 'all_select' :
             object_list = Comment.objects.all().order_by('-created_at')
         elif q_profile_pk == 'all_select':
-            object_list = Comment.objects.filter(created_at__gte=date_dic[q_period_key]).order_by('-created_at')
+            object_list = Comment.objects.filter(created_at__gte=func_dic.get_date_dic(q_period_key)).order_by('-created_at')
         elif q_period_key == 'all_select':
             object_list = Comment.objects.filter(author=q_profile_pk).order_by('-created_at')
         else:
-            object_list = Comment.objects.filter(author=q_profile_pk, created_at__gte=date_dic[q_period_key]).order_by('-created_at')
-
+            object_list = Comment.objects.filter(author=q_profile_pk, created_at__gte=func_dic.get_date_dic(q_period_key)).order_by('-created_at')
         return object_list

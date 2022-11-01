@@ -3,10 +3,7 @@
 
 
   <!-- ひとつのコメント -->
-  <!-- <div class="container"> -->
   <section>
-
-
     <div class="row">
       <div class="col-auto me-auto">
         <!-- 個人ページと全員ページで出し分ける -->
@@ -41,7 +38,7 @@
 
     <small class="mb-1">{{ object.comment_text | linebreaksbr }}</small>
 
-    <!-- 返信コメントフォーム -->
+    <!-- ひとつのコメントへの返信コメントフォーム -->
     {% include 'snippets/comment_reply_form.html' %}
     <!-- </div> -->
   </section>
@@ -50,7 +47,6 @@
 
   <!-- ひとつのコメントに対する、返信コメントの一覧を出力 -->
   <section class="bg-light">
-
     {% for reply in object.reply_set.all %}
     <div class="mt-2 py-2 reply_box">
       <div class="row">
@@ -65,4 +61,5 @@
     </div>
     {% endfor %}
   </section>
+
 </div>
