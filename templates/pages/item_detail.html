@@ -17,7 +17,9 @@
       <small class="card-title">{{item.title}}</small>
     </div>
 
+
     <div class="accordion mt-2" id="accordionExample">
+      <!-- accordion_1 -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingDescription">
           <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
@@ -32,6 +34,7 @@
         </div>
       </div>
 
+      <!-- accordion_2 -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingCreateComment">
           <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCreateComment" aria-expanded="false" aria-controls="collapseCreateComment">
@@ -40,22 +43,13 @@
         </h2>
         <div id="collapseCreateComment" class="accordion-collapse collapse" aria-labelledby="headingCreateComment">
           <div class="accordion-body">
-
-            <!-- コメント作成用 -->
-            <form method="POST">
-              {% csrf_token %}
-              {{ comment_form }}
-
-              <div class="text-right my-2">
-                <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
-                <button type="submit" class="btn btn-info btn-sm" name="CommentFormBtn">コメント送信</button>
-              </div>
-            </form>
-
+            <!-- コメント入力フォーム -->
+            {% include 'snippets/comment_form.html' %}
           </div>
         </div>
       </div>
 
+      <!-- accordion_3 -->
       <div class="accordion-item">
         <h2 class="accordion-header " id="headingListComment">
           <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseListComment" aria-expanded="false" aria-controls="collapseListComment">
@@ -69,72 +63,29 @@
           <div class="accordion-body">
 
             <!-- 動画に紐づくコメントを一覧で表示 -->
-            {% for comment in item.comment_set.all %}
-            <div class="detail_comment_list py-2">
-              <div class="row">
-                <div class="col-auto me-auto">
-                  <small class="text-muted">{{ comment.author.profile.name }}</small>
-                </div>
-                <div class="col-auto">
-                  <small class="text-muted">{{ comment.updated_at }}</small>
-                  <div id="panelsStayOpen-heading_{{ comment.pk }}" class="inline_block">
-                    <button type="button" class="btn btn-light btn-sm fs-6" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse_{{ comment.pk }}" aria-expanded="false" aria-controls="panelsStayOpen-collapse_{{ comment.pk }}" style="font-size: 0.2rem;">返信</button>
-                    <!-- コメントに紐づく返信コメントの数 -->
-                    <span class="badge bg-primary rounded-pill">{{comment.reply_set.all.count}}</span>
-                  </div>
-                </div>
-              </div>
-              <small class=" mb-1">{{ comment.comment_text| linebreaksbr}}</small>
+            <!-- <div class="container my-2"> -->
+            <ol class="list-group list-group-numbered">
+              {% for object in item.comment_set.all %}
 
-              <!-- 返信コメントの箱 -->
-              <div id="panelsStayOpen-collapse_{{ comment.pk }}" class=" collapse" aria-labelledby="panelsStayOpen-heading_{{ comment.pk }}">
+              <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
+              {% include 'snippets/comment_box.html' %}
 
-                <!-- 返信コメントフォーム -->
-                <form method="POST">
-                  {% csrf_token %}
-                  <!-- このフォームは非表示なので入力されない -->
-                  {{ reply_form }}
+              {% endfor %}
+            </ol>
+            <!-- </div> -->
+            <!-- 返信コメントフォーム -->
+            {% include 'snippets/comment_reply_form.html' %}
 
-                  <!-- comment.idを含んで、処理する部分 -->
-                  <textarea name="comment_text" cols="40" rows="1" class="form-control my-3" placeholder="返信する" oninput="resizeReplyTextarea(this);" maxlength="1000" required="" id="id_comment_text_{{ comment.pk }}"></textarea>
-                  <input type="hidden" name="comment_to" value="{{ comment.pk }}">
-
-
-                  <div class="text-right my-2">
-                    <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
-                    <button type="submit" class="btn btn-info btn-sm" name="ReplyFormBtn">返信 送信</button>
-                  </div>
-                </form>
-
-                <!-- コメントに対する、返信コメントの一覧を出力 -->
-                <div class="container bg-light mt-2 py-2">
-                  {% for reply in comment.reply_set.all %}
-                  <div class="my-3">
-                    <div class="row">
-                      <div class="col-auto me-auto">
-                        <small>{{ reply.author.profile.name }}</small>
-                      </div>
-                      <div class="col-auto">
-                        <small>{{ reply.created_at }}</small>
-                      </div>
-                    </div>
-                    <small>{{ reply.comment_text | linebreaksbr }}</small>
-                  </div>
-                  {% endfor %}
-                </div>
-
-              </div>
-            </div>
-
-            {% endfor %}
           </div>
         </div>
+
       </div>
 
     </div>
-    <i class="fa-regular fa-comment-pen"></i>
   </div>
 
+</div>
 
 
-  {% endblock main %}
+
+{% endblock main %}

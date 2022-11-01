@@ -9,16 +9,8 @@
   <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 反省(スキルアップした点、改善点)">反省(スキルアップした点、改善点)</button>
   <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 明日の目標">明日の目標</button>
 
-  <!-- コメント入力 -->
-  <form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <div class="text-right my-2">
-      <button type="submit" class="btn btn-info btn-sm disabled">キャンセル</button>
-      <button type="" class="btn btn-info btn-sm">コメント</button>
-    </div>
-  </form>
-
+  <!-- 入力フォーム -->
+  {% include 'snippets/comment_form.html' %}
 </div>
 
 <!-- 全てのコメントの一覧 -->

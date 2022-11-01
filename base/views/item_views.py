@@ -116,7 +116,8 @@ class ItemDetailView(ModelFormMixin, DetailView):
         comment_form = self.comment_form_class(self.request.GET or None)
         reply_form = self.reply_form_class(self.request.GET or None)
         context.update({
-            'comment_form': comment_form,
+            # 'comment_form': comment_form,
+            'form': comment_form,
             'reply_form':reply_form
         })
         return context
