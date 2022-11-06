@@ -42,9 +42,9 @@ class ProfileCreateForm(forms.ModelForm):
         labels = {'name': '名前', 'tel': '電話番号', 'birth_day': '誕生日',}
         widgets = {
             'name': forms.TextInput(
-                attrs={'class': 'form-control mb-3  col-md-4', 'placeholder': '',}),
+                attrs={'class': 'form-control mb-3', 'placeholder': '',}),
             'tel': forms.TextInput(
-                attrs={'class': 'form-control mb-3 col-md-4',}),
+                attrs={'class': 'form-control mb-3',}),
             'birth_day': forms.SelectDateWidget(years=year_range,
                 attrs={'class': 'form-select inline_block_select ml-2 mb-3',}),
         }

@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('', views.IndexListView.as_view()),  # トップページ
     path('comment/', views.CommentListView.as_view(), name="comment"),  # 自分のコメントページ
-    path('everyone/', views.EveryoneCommentListView.as_view()),  # 全員のコメントページ
+    path('everyone/', views.EveryoneCommentListView.as_view(), name="e_comment"),  # 全員のコメントページ
     path('item/create/', views.ItemCreateView.as_view(), name="item_create"),  # 動画投稿ページ
     path('item/list/', views.ItemListView.as_view(), name="item_list"),  # 動画一覧(作業用)ページ
     path('item/update/<str:pk>/', views.ItemUpdateView.as_view(), ),  # 動画編集(作業用)ページ

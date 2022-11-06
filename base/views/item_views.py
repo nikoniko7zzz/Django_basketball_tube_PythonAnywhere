@@ -1,15 +1,15 @@
 # from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from base.models import Item, Comment, Tag, Reply
 from django.views.generic.edit import ModelFormMixin
-from base.forms import CommentCreateForm, ItemCreateForm, ReplyCreateForm
+from base.models import Item, Comment, Tag, Reply, Profile
+from base.forms import CommentCreateForm, ItemCreateForm, ReplyCreateForm, CommentUpdateForm, ReplyUpdateForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin # ログインしている人だけ
-from base.models import Profile
 from base.views import func_dic # オリジナル関数ファイル
 from base.views import search_condition as sc # オリジナル関数ファイル
+from datetime import datetime
 
 
 
@@ -62,15 +62,19 @@ class ItemDetailView(ModelFormMixin, DetailView):
     template_name = 'pages/item_detail.html'
     context_object_name = 'item'
     comment_form_class = CommentCreateForm
+    comment_update_form_class = CommentUpdateForm
     reply_form_class = ReplyCreateForm
-    fields = ()
+    reply_update_form_class = ReplyUpdateForm
+    fields = () # 必要
 
 
     # no get_context_data override
     def post(self, request, *args, **kwargs):
         # first construct the form to avoid using it as instance
         cform = CommentCreateForm(**self.get_form_kwargs()) # Formを取得
+        cuform = CommentUpdateForm(**self.get_form_kwargs()) # Formを取得
         rform = ReplyCreateForm(**self.get_form_kwargs()) # Formを取得
+        ruform = ReplyUpdateForm(**self.get_form_kwargs()) # Formを取得
         # form = self.get_form() # Formを取得
         self.object = self.get_object() # Itemのこと
 
@@ -82,6 +86,16 @@ class ItemDetailView(ModelFormMixin, DetailView):
             comment.save()
             return HttpResponseRedirect(self.get_success_url())
 
+        def cuform_valid(self, cuform):
+            # item = get_object_or_404(Item, pk=self.object.pk) # Redirect用
+            update_comment_text = cuform.cleaned_data.get('update_comment_text')
+            update_id = cuform.cleaned_data.get('update_id')
+            comment = Comment.objects.get(pk=update_id)
+            comment.comment_text = update_comment_text # 上書き
+            comment.updated_at = datetime.now() # 上書き
+            comment.save()
+            return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': self.object.pk}))
+
         def rform_valid(self, rform):
             item = get_object_or_404(Item, pk=self.object.pk)
             reply = rform.save(commit=False)
@@ -90,6 +104,16 @@ class ItemDetailView(ModelFormMixin, DetailView):
             reply.save()
             return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': self.object.pk}))
 
+        def ruform_valid(self, ruform):
+            update_comment_text = ruform.cleaned_data.get('update_comment_text')
+            update_id = ruform.cleaned_data.get('update_id')
+            reply = Reply.objects.get(pk=update_id)
+            reply.comment_text = update_comment_text # 上書き
+            reply.updated_at = datetime.now() # 上書き
+            reply.save()
+            return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': self.object.pk}))
+
+
         if 'CommentFormBtn' in request.POST:
             # print('CommentFormBtnボタン押した')
             if cform.is_valid():
@@ -97,9 +121,21 @@ class ItemDetailView(ModelFormMixin, DetailView):
             else:
                 return self.render_to_response(self.get_context_data())
 
+        if 'CommentUpdateFormBtn' in request.POST:
+            if cuform.is_valid():
+                return cuform_valid(self, cuform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
         if 'ReplyFormBtn' in request.POST:
             if rform.is_valid():
                 return rform_valid(self, rform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
+        if 'ReplyUpdateFormBtn' in request.POST:
+            if ruform.is_valid():
+                return ruform_valid(self, ruform)
             else:
                 return self.render_to_response(self.get_context_data())
 
@@ -114,11 +150,15 @@ class ItemDetailView(ModelFormMixin, DetailView):
 
         context['comment_count'] = Comment.objects.filter(target=self.target).count() # これもテンプレートで集計でもいいな
         comment_form = self.comment_form_class(self.request.GET or None)
+        comment_update_form = self.comment_update_form_class(self.request.GET or None)
         reply_form = self.reply_form_class(self.request.GET or None)
+        reply_update_form = self.reply_update_form_class(self.request.GET or None)
         context.update({
             # 'comment_form': comment_form,
             'form': comment_form,
-            'reply_form':reply_form
+            'comment_update_form,': comment_update_form,
+            'reply_form':reply_form,
+            'reply_update_form,': reply_update_form,
         })
         return context
 
@@ -175,8 +215,13 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
 class CommentListView(LoginRequiredMixin, ModelFormMixin, ListView):
     model = Comment
     template_name = 'pages/comment.html'
-    # context_object_name = 'comment_objects'
-    form_class = CommentCreateForm
+    context_object_name = 'comment_objects'
+    comment_form_class = CommentCreateForm
+    comment_update_form_class = CommentUpdateForm
+    reply_form_class = ReplyCreateForm
+    reply_update_form_class = ReplyUpdateForm
+    fields = () # 必要
+    # form_class = CommentCreateForm
     success_url = reverse_lazy('comment')
 
     def get(self, request, *args, **kwargs):
@@ -184,43 +229,153 @@ class CommentListView(LoginRequiredMixin, ModelFormMixin, ListView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.object = None
-        self.object_list = self.get_queryset()
-        form = self.get_form()
+        cform = CommentCreateForm(**self.get_form_kwargs()) # Formを取得
+        cuform = CommentUpdateForm(**self.get_form_kwargs()) # Formを取得
+        rform = ReplyCreateForm(**self.get_form_kwargs()) # Formを取得
+        ruform = ReplyUpdateForm(**self.get_form_kwargs()) # Formを取得
+        # form = self.get_form() # Formを取得
 
-        def form_valid(self, form):
-            comment = form.save(commit=False)
+        def cform_valid(self, cform):
+            comment = cform.save(commit=False)
             comment.author = self.request.user
             comment.save()
-            print('保存しました')
             return HttpResponseRedirect(reverse('comment'))
 
-        if form.is_valid():
-            return form_valid(self, form)
-        else:
-            return self.form_invalid(form)
+        def cuform_valid(self, cuform):
+            update_comment_text = cuform.cleaned_data.get('update_comment_text')
+            update_id = cuform.cleaned_data.get('update_id')
+            comment = Comment.objects.get(pk=update_id)
+            comment.comment_text = update_comment_text # 上書き
+            comment.updated_at = datetime.now() # 上書き
+            comment.save()
+            return HttpResponseRedirect(reverse('comment'))
+
+        def rform_valid(self, rform):
+            reply = rform.save(commit=False)
+            reply.author = self.request.user
+            reply.save()
+            return HttpResponseRedirect(reverse('comment'))
+
+        def ruform_valid(self, ruform):
+            update_comment_text = ruform.cleaned_data.get('update_comment_text')
+            update_id = ruform.cleaned_data.get('update_id')
+            reply = Reply.objects.get(pk=update_id)
+            reply.comment_text = update_comment_text # 上書き
+            reply.updated_at = datetime.now() # 上書き
+            reply.save()
+            return HttpResponseRedirect(reverse('comment'))
+
+
+        if 'CommentFormBtn' in request.POST:
+            # print('CommentFormBtnボタン押した')
+            if cform.is_valid():
+                return cform_valid(self, cform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
+        if 'CommentUpdateFormBtn' in request.POST:
+            if cuform.is_valid():
+                return cuform_valid(self, cuform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
+        if 'ReplyFormBtn' in request.POST:
+            if rform.is_valid():
+                return rform_valid(self, rform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
+        if 'ReplyUpdateFormBtn' in request.POST:
+            if ruform.is_valid():
+                return ruform_valid(self, ruform)
+            else:
+                return self.render_to_response(self.get_context_data())
 
     def get_queryset(self):
         # アップデート順に表示 新しいのが上
         return Comment.objects.filter().order_by('-updated_at')
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        comment_form = self.comment_form_class(self.request.GET or None)
+        comment_update_form = self.comment_update_form_class(self.request.GET or None)
+        reply_form = self.reply_form_class(self.request.GET or None)
+        reply_update_form = self.reply_update_form_class(self.request.GET or None)
+        context.update({
+            # 'comment_form': comment_form,
+            'form': comment_form,
+            'comment_update_form,': comment_update_form,
+            'reply_form':reply_form,
+            'reply_update_form,': reply_update_form,
+        })
+        return context
 
-class EveryoneCommentListView(LoginRequiredMixin, ListView):
+
+class EveryoneCommentListView(LoginRequiredMixin, ModelFormMixin, ListView):
     model = Comment
+    context_object_name = 'comment_objects'
     template_name = 'pages/everyone_comment.html'
+    reply_form_class = ReplyCreateForm
+    reply_update_form_class = ReplyUpdateForm
+    fields = () # 必要
+
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        rform = ReplyCreateForm(**self.get_form_kwargs()) # Formを取得
+        ruform = ReplyUpdateForm(**self.get_form_kwargs()) # Formを取得
+        # form = self.get_form() # Formを取得
+
+        def rform_valid(self, rform):
+            reply = rform.save(commit=False)
+            reply.author = self.request.user
+            reply.save()
+            return HttpResponseRedirect(reverse('e_comment'))
+
+        def ruform_valid(self, ruform):
+            update_comment_text = ruform.cleaned_data.get('update_comment_text')
+            update_id = ruform.cleaned_data.get('update_id')
+            reply = Reply.objects.get(pk=update_id)
+            reply.comment_text = update_comment_text # 上書き
+            reply.updated_at = datetime.now() # 上書き
+            reply.save()
+            return HttpResponseRedirect(reverse('e_comment'))
+
+        if 'ReplyFormBtn' in request.POST:
+            if rform.is_valid():
+                return rform_valid(self, rform)
+            else:
+                return self.render_to_response(self.get_context_data())
+
+        if 'ReplyUpdateFormBtn' in request.POST:
+            if ruform.is_valid():
+                return ruform_valid(self, ruform)
+            else:
+                return self.render_to_response(self.get_context_data())
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         # ユーザーの名前を返す(抽出条件select用)
         profiles = Profile.objects.all()
         context['profiles'] = profiles
-        # 検索条件の(名前と日付)をsessionに保存する
+
+        # 検索条件の(名前と日付)をsessionに保存する(selectタグの中身の保持用)
         sc.save_search_conditions(self)
         # sessionの値をテンプレートにかえす
         context['s_profile_pk'] = self.request.session['s_profile_pk']
         context['s_profile_name'] = self.request.session['s_profile_name']
         context['s_period_key'] = self.request.session['s_period_key']
         context['s_period'] = self.request.session['s_period']
+        # formをテンプレートにかえす
+        reply_form = self.reply_form_class(self.request.GET or None)
+        reply_update_form = self.reply_update_form_class(self.request.GET or None)
+        context.update({
+            # 'comment_form': comment_form,
+            'reply_form':reply_form,
+            'reply_update_form,': reply_update_form,
+        })
         return context
 
     def get_queryset(self):

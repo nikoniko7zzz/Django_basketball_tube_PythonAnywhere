@@ -14,17 +14,15 @@
 </div>
 
 <!-- 全てのコメントの一覧 -->
+{% for comment in comment_objects %}
 <div class="container my-2">
-  <ol class="list-group list-group-numbered">
-    {% for object in object_list %}
-    {% if user == object.author %}
+  {% if user == comment.author %}
 
-    <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
-    {% include 'snippets/comment_box.html' %}
+  <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
+  {% include 'snippets/comment_box.html' %}
 
-    {% endif %}
-    {% endfor %}
-  </ol>
+  {% endif %}
 </div>
+{% endfor %}
 
 {% endblock main %}

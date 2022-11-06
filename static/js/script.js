@@ -1,6 +1,8 @@
 // 内容
 // - 改行で自動で大きさが変わるtextarea
 // - comment.html commentに紐ずく動画がないときはリンクボタンを非表示にする
+// - comment.html ボタンの内容のテキストをtextareaのカーソル位置に挿入
+// - item_detail.html 修正ボタンidのcomment_textをtextareaに挿入し編集できるようにする
 
 console.log("Hello Start");
 
@@ -45,9 +47,10 @@ window.addEventListener('load', function() {
 })
 
 // Replyは一つのテンプレートに複数あるので、idを取得して、getElementByIdする
-function resizeReplyTextarea(ele){
+// コメント修正と返信修正も同じjs
+function resizeTextarea(ele){
   //- 改行に合わせてテキストエリアのサイズ変更
-  var id_value = ele.id; // eleのプロパティとしてidを取得
+  var id_value = ele.id; // eleのプロパティとしてidを取得 id="reply_text_{{ comment.pk }}"
   const PADDING_Y = 20;
   const $textarea = document.getElementById(id_value);
   let lineHeight = getComputedStyle($textarea).lineHeight;
@@ -64,10 +67,12 @@ function resizeReplyTextarea(ele){
 window.onload = function onLoad() {
   var link = document.querySelectorAll("#comment_to_detail_link");
   var linkBox = document.querySelectorAll("#comment_to_detail_link_box");
+  // console.log(linkBox.length);
+  // console.log(link.length);
   for(var i=0; i<link.length;i++){
-    // console.log(link[i].innerHTML);
     if (link[i].innerHTML=='None'){
-      // console.log('非表示にします');
+      console.log(link[i].innerHTML);
+      console.log('非表示にします');
       linkBox[i].style.display ="none";
     }
   }
@@ -84,6 +89,67 @@ function addText(e){
 	area.value = area.value.substr(0, area.selectionStart)
 			+ text
 			+ area.value.substr(area.selectionStart);
+}
+
+// ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+// item_detail.html 「コメント修正ボタン」idのcomment_textをtextareaに挿入し編集できるようにする ＊＊＊＊＊
+function updateCommentText(e){
+  // 修正ボタンのidを取得
+	var id = e.id; // id="collapse_update_Trigger_{{ comment.pk }}
+  var id = id.replace('collapse_update_Trigger_', '');
+  console.log(id);
+	//テキストエリアを取得
+	var area = document.getElementById('id_comment_text_' + id);
+  // 修正したいコメントを取得 innerHTML(<br>も含めて取得)
+  var update_target = document.getElementById('get_comment_text_' + id)
+  // 正規表現で全ての<br>を置換
+  var update_text = update_target.innerHTML.replace(/<br>/g, '\n')
+  area.value = update_text
+
+  //- 改行に合わせてテキストエリアのサイズ変更
+  const PADDING_Y = 20;
+  let lineHeight = getComputedStyle(area).lineHeight;
+  lineHeight = lineHeight.replace(/[^-\d\.]/g, '');
+  const lines = (area.value + '\n').match(/\n/g).length;
+  area.style.height = lineHeight * lines + PADDING_Y + 'px';
+
+  // 修正したいコメント非表示
+  update_target.style.display ="none";
+}
+
+// item_detail.html 「返信修正ボタン」idのcomment_textをtextareaに挿入し編集できるようにする ＊＊＊＊＊
+function updateReplyText(e){
+  // 修正ボタンのidを取得
+	var id = e.id; // id="collapse_reply_update_Trigger_{{ comment.pk }}
+  var id = id.replace('collapse_reply_update_Trigger_', '');
+  console.log(id);
+	//テキストエリアを取得
+	var area = document.getElementById('id_reply_text_' + id);
+  // 修正したいコメントを取得 innerHTML(<br>も含めて取得)
+  var update_target = document.getElementById('get_reply_text_' + id)
+  // 正規表現で全ての<br>を置換
+  var update_text = update_target.innerHTML.replace(/<br>/g, '\n')
+  area.value = update_text
+
+  //- 改行に合わせてテキストエリアのサイズ変更
+  const PADDING_Y = 20;
+  let lineHeight = getComputedStyle(area).lineHeight;
+  lineHeight = lineHeight.replace(/[^-\d\.]/g, '');
+  const lines = (area.value + '\n').match(/\n/g).length;
+  area.style.height = lineHeight * lines + PADDING_Y + 'px';
+
+  // 修正したいコメント非表示
+  update_target.style.display ="none";
+}
+
+
+// item_detail.html 編集送信ボタンを押したら、非表示にしたコメントを表示する ＊＊＊＊＊
+function showComment_text(e){
+	var id = e.id; // id="update_{{ object.pk }}"
+  var id = id.replace('submit_', '');
+  // 修正したいコメントを取得 innerHTML(<br>も含めて取得)
+  var update_target = document.getElementById('get_comment_text_' + id)
+  update_target.style.display ="block";
 }
 
 

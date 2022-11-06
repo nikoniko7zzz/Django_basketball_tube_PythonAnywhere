@@ -9,7 +9,7 @@
     <legend>絞り込み条件</legend>
     <div class="row">
 
-      <div class="col-auto">
+      <div class="col-auto pr-0">
         <select name="select_profile_pk" class="form-select mb-2">
           <option value="{{ s_profile_pk }}" selected="">{{ s_profile_name }}</option>
           <option value="all_select">すべて</option>
@@ -19,7 +19,7 @@
           {% endfor %}
         </select>
       </div>
-      <div class="col-auto">
+      <div class="col-auto pr-0">
         <select name="select_period_key" class="form-select mb-2">
           <option value="{{ s_period_key }}" selected="">{{ s_period }}</option>
           <option value="today_select">今日</option>
@@ -30,7 +30,7 @@
           <option value="all_select">すべて</option>
         </select>
       </div>
-      <div class="text-right col-auto">
+      <div class="text-right col-auto pr-0">
         <button type="submit" class="btn btn-info btm-sm">検索</button>
       </div>
     </div>
@@ -42,7 +42,7 @@
 <!-- 全てのコメントの一覧 -->
 <div class="container my-2">
   <ol class="list-group list-group-numbered">
-    {% for object in object_list %}
+    {% for comment in comment_objects %}
 
     <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
     {% include 'snippets/comment_box.html' %}

@@ -1,0 +1,27 @@
+<!-- 返信の一つ -->
+<div class="mb-2 py-2 border-top">
+  <div class="row">
+    <div class="col-auto me-auto">
+      <small class="text-muted mr-4">{{ reply.author.profile.name }}</small>
+    </div>
+    <div class="col-auto">
+      <small>{{ reply.created_at }}</small>
+
+      {% if user == reply.author %}
+      <!-- 編集ボタンで開閉する コメント編集入力フォーム -->
+      <button class="badge btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_reply_update_{{ reply.pk }}" aria-expanded="false" aria-controls="collapse_reply_update_{{ reply.pk }}" id="collapse_reply_update_Trigger_{{ reply.pk }}" onclick="updateReplyText(this);">編集</button>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- 返信修正入力フォームが開いたら閉じる -->
+  <small id="get_reply_text_{{ reply.pk }}" class="mb-1">{{ reply.comment_text | linebreaksbr }}</small>
+
+
+  <!-- 編集ボタンで開閉する -->
+  <div id="collapse_reply_update_{{ reply.pk }}" class="collapse multi-collapse">
+    {% include 'snippets/reply_form_update.html' %}
+  </div>
+
+</div>

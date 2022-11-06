@@ -3,36 +3,32 @@
 {% block main %}
 
 <div class="container my-5">
-  <div class="col-12">
-    <h1>
-      <!-- 動画追加と編集を出し分ける -->
-      <!-- request.pathの中にcreateがあれば... -->
+  <h1>
+    <!-- 動画追加と編集を出し分ける -->
+    <!-- request.pathの中にcreateがあれば... -->
+    {% if 'create' in request.path %}
+    動画追加
+    {% elif 'update' in request.path %}
+    動画編集
+    {% endif %}
+  </h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{form}}
+
+    <!-- 動画追加と編集を出し分ける -->
+    <div class="text-right mb-3">
       {% if 'create' in request.path %}
-      動画追加
+      <button type="submit" class="btn btn-info btm-sm">追加</button>
       {% elif 'update' in request.path %}
-      動画編集
-      {% endif %}
-    </h1>
+      <button type="submit" class="btn btn-info btm-sm">変更</button>
+    </div>
+    {% endif %}
+  </form>
 
-    <form method="POST">
-      {% csrf_token %}
-      {{form}}
 
-      <!-- 動画追加と編集を出し分ける -->
-      <!-- request.pathの中にloginがあれば... -->
-      {% if 'create' in request.path %}
-      <div class="text-right mb-3">
-        <button type="submit" class="btn btn-info btm-sm">追加</button>
-      </div>
-      {% elif 'update' in request.path %}
-      <div class="text-right mb-3">
-        <button type="submit" class="btn btn-info btm-sm">変更</button>
-      </div>
-      {% endif %}
 
-    </form>
-
-  </div>
 </div>
 
 {% endblock %}

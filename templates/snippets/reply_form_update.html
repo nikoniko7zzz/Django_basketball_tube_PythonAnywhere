@@ -1,0 +1,16 @@
+<!-- 修正コメントフォーム -->
+<form method="POST">
+  {% csrf_token %}
+  <!-- このフォームは非表示なので入力されない -->
+  {{reply_update_form}}
+
+  <!-- comment.idを含んで、処理する部分 -->
+  <textarea name="update_comment_text" cols="40" rows="1" class="form-control my-2" oninput="resizeTextarea(this);" maxlength="1000" required="" id="id_reply_text_{{ reply.pk }}"></textarea>
+  <input type="hidden" name="update_id" value="{{ reply.pk }}">
+
+
+  <div class="text-right my-2">
+    <button type="text" class="btn btn-info btn-sm disabled" onclick="clearText()">キャンセル</button>
+    <button type="submit" class="btn btn-info btn-sm" name="ReplyUpdateFormBtn" id="submit_{{ reply.pk }}" onclick="showComment_text(this);">編集 送信</button>
+  </div>
+</form>
