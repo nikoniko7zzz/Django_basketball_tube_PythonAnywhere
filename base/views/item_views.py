@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin # ログインして�
 from base.views import func_dic # オリジナル関数ファイル
 from base.views import search_condition as sc # オリジナル関数ファイル
 from datetime import datetime
+from django.contrib import messages
 
 
 
@@ -189,6 +190,7 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         item = form.save(commit=False)
         item.author = self.request.user
         item.save()
+        messages.success(self.request, '動画を追加しました')
         return HttpResponseRedirect(reverse('item_list'))
 
 
@@ -199,6 +201,11 @@ class ItemUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ItemCreateForm
     success_url = reverse_lazy('item_list') # 更新後のページを返す
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        messages.success(self.request, '動画を更新しました。')
+        return super().post(request, *args, **kwargs)
+
 
 #削除画面
 class ItemDeleteView(LoginRequiredMixin, DeleteView):
@@ -206,6 +213,10 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'pages/item_delete.html'
     fields  = ('youtube_url', 'tag', 'shooting_date', 'title', 'description')
     success_url = reverse_lazy('item_list') #削除後のリダイレクト先
+
+    def post(self, request, *args, **kwargs):
+        messages.success(self.request, '動画を削除しました。')
+        return self.delete(request, *args, **kwargs)
 
 
 # class CommentListView(ListView):

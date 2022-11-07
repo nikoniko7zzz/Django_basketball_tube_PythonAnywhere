@@ -6,6 +6,7 @@
 
 console.log("Hello Start");
 
+
 // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 // 改行で自動で大きさが変わるtextarea ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 
@@ -153,7 +154,14 @@ function showComment_text(e){
 }
 
 
-console.log("Hello End");
+// 2秒後に消えるbootstrap toast Message ＊＊＊＊＊
+window.setTimeout(dispMsg, 5000);
+function dispMsg(){
+  let alert = document.getElementById('alert');
+  alert.style.display ="none";
+}
+
+
 
 
 // ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊

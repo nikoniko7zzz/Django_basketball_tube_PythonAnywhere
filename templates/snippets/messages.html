@@ -1,0 +1,7 @@
+{% for message in messages %}
+
+<div class="toast-body {{ message.tags }} position-fixed top-5 end-0 m-3 border-0  shadow" id="alert" style="z-index: 99; border-radius: 4px;">
+  {{ message }}
+</div>
+
+{% endfor %}

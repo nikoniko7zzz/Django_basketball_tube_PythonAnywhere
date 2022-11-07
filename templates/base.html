@@ -26,6 +26,8 @@
     {% endblock header %}
   </header>
 
+  <!-- メッセージがある時だけ表示される -->
+  {% include 'snippets/messages.html' %}
 
   <main>
     {% block main %}
