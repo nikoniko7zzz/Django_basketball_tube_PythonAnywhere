@@ -22,3 +22,4 @@ class ItemCreateForm(forms.ModelForm):
             'description': forms.Textarea(
                 attrs={'class': 'form-control mb-3', 'placeholder': '動画詳細を入力してください', 'rows':'1', 'oninput':"resizeItemTextarea();",}),
         }
+

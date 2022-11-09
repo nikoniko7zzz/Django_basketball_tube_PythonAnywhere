@@ -2,31 +2,35 @@
 
 {% block main %}
 
+
 <div class="container my-5">
-  <h1>VideoList</h1>
-  <ol class="list-group list-group-numbered">
-    {% for item in item_list %}
-    <div class="detail_comment_list py-2">
-      <div class="row">
-
-        <div class="col-9">
-          <p>{{item.tag}}</p>
-          <p>{{item.shooting_date}}</p>
-        </div>
-        <div class="col-3">
-          <a href="/item/update/{{item.pk}}/">
-            <button type="button" class="btn btn-light btn-sm fs-6">編集</button>
-          </a>
-          <a href="/item/delete/{{item.pk}}/">
-            <button type="button" class="btn btn-light btn-sm fs-6">削除</button>
-          </a>
-        </div>
+  <h1>動画一覧</h1>
+  {% for item in item_list %}
+  <!-- ひとつの動画の箱 -->
+  <div class="one_box py-2">
+    <div class="row">
+      <div class="col-auto me-auto">
+        <small>{{item.shooting_date}}</small>
       </div>
-
-      <p>{{item.title}}</p>
+      <div class="col-auto">
+        <small>{{item.tag}}</small>
+        <a href="/item/update/{{item.pk}}/">
+          <button type="button" class="badge btn btn-outline-primary">編集</button>
+        </a>
+        <a href=" /item/delete/{{item.pk}}/">
+          <button type="button" class="badge btn btn-outline-primary">削除</button>
+        </a>
+      </div>
     </div>
-    {% endfor %}
-  </ol>
+    <div class="row"><small>{{item.title}}</small></div>
+    <div class="row"><small>{{item.description|truncatechars:25}}</small></div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ページング処理の部分 -->
+<div class="container">
+  {% include 'snippets/pagination.html' %}
 </div>
 
 {% endblock %}
