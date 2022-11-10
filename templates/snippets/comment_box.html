@@ -16,11 +16,14 @@
       {% if user == comment.author %}
       <!-- 編集ボタンで開閉する コメント編集入力フォーム -->
       <button class="badge btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_update_{{ comment.pk }}" aria-expanded="false" aria-controls="collapse_update_{{ comment.pk }}" id="collapse_update_Trigger_{{ comment.pk }}" onclick="updateCommentText(this);">編集</button>
+
       {% endif %}
 
 
       <!-- 返信ボタンで開閉する 返信コメント入力フォーム -->
       <button class="badge btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_reply_{{ comment.pk }}" aria-expanded="false" aria-controls="collapse_reply_{{ comment.pk }}" id="collapse_reply_Trigger_{{ comment.pk }}">返信{{ comment.reply_set.all.count }}件</button>
+
+
 
     </div>
   </div>
@@ -40,7 +43,7 @@
   <small class="mb-1" id="get_comment_text_{{ comment.pk }}">{{ comment.comment_text | linebreaksbr }}</small>
 
   <!-- 編集ボタンで開閉する -->
-  <div id="collapse_update_{{ comment.pk }}" class="collapse multi-collapse">
+  <div id="collapse_comment_{{ comment.pk }}">
     {% include 'snippets/comment_form_update.html' %}
   </div>
 

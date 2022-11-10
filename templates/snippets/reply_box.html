@@ -9,7 +9,7 @@
 
       {% if user == reply.author %}
       <!-- 編集ボタンで開閉する コメント編集入力フォーム -->
-      <button class="badge btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_reply_update_{{ reply.pk }}" aria-expanded="false" aria-controls="collapse_reply_update_{{ reply.pk }}" id="collapse_reply_update_Trigger_{{ reply.pk }}" onclick="updateReplyText(this);">編集</button>
+      <button class="badge btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_reply_update_{{ reply.pk }}" aria-expanded="false" aria-controls="collapse_reply_update_{{ reply.pk }}" id="collapse_reply_update_Trigger_{{ reply.pk }}" onclick="updateCommentText(this);">編集</button>
       {% endif %}
 
     </div>

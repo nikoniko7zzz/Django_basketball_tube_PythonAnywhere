@@ -2,8 +2,7 @@
 
 {% block main %}
 
-
-<div class="container my-2">
+<section class="container my-2">
   <form method="get" action="">
     {% csrf_token %}
     <div class="row">
@@ -35,20 +34,18 @@
     </div>
 
   </form>
-</div>
+</section>
 
 
 <!-- 全てのコメントの一覧 -->
-<div class="container my-2">
-  <ol class="list-group list-group-numbered">
-    {% for comment in comment_objects %}
+<section class="container my-2">
+  {% for comment in comment_objects %}
 
-    <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
-    {% include 'snippets/comment_box.html' %}
+  <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
+  {% include 'snippets/comment_box.html' %}
 
-    {% endfor %}
-  </ol>
-</div>
+  {% endfor %}
+</section>
 
 
 {% endblock main %}

@@ -27,7 +27,21 @@ body {
   display: none;
 }
 
+/* a:hover {
+  color: white;
+} */
 
+.whitetext:visited {
+  color: white;
+}
+
+.whitetext:hover {
+  text-decoration: none;
+}
+
+/* a.no-color-change {
+  color: white;
+} */
 
 
 /* bootstrapのclass */

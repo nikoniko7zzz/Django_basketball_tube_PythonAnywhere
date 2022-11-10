@@ -1,9 +1,16 @@
-<a href="/items/{{item.pk}}/">
+<a href="/items/{{item.pk}}/" class="whitetext">
   <div class="card w-100">
     <div class="card-body">
-      <div class="row justify-content-between">
-        <div class="col-4 align-self-start" style="padding-right: 0px;"><small class="card-text">#{{item.tag}}</small></div>
-        <div class="col-8 align-self-end text-right" style="padding-left: 0;"><small class="card-text">{{item.updated_at}}</small></div>
+      <div class="row">
+        <div class="col-auto me-auto">
+          <small class="card-text">#{{item.tag}}</small>
+        </div>
+        <div class="col-auto">
+          <small class="card-text">{{item.shooting_date}}</small>
+          <!-- <small class="bg-info">詳しく見る</small> -->
+          <span class="badge rounded-pill bg-info">詳しく見る</span>
+        </div>
+
       </div>
       <small class="card-title">{{item.title}}</small>
     </div>
@@ -11,5 +18,7 @@
       <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{item.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0">
       </iframe>
     </div>
+
+
   </div>
 </a>

@@ -10,7 +10,7 @@ class CommentCreateForm(forms.ModelForm):
         labels = {'comment_text': '',}
         widgets = {
             'comment_text': forms.Textarea(
-                attrs={'class': 'form-control my-2', 'placeholder': 'コメントする', 'rows':'1', 'oninput':'resizeItemTextarea();', }),
+                attrs={'class': 'form-control my-2', 'placeholder': 'コメントする', 'rows':'1', 'oninput':'resizeTextarea(this);', }),
         }
 
 
