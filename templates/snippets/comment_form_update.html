@@ -5,12 +5,12 @@
   {{comment_update_form}}
 
   <!-- comment.idを含んで、処理する部分 -->
-  <textarea name="update_comment_text" cols="40" rows="1" class="form-control my-2" oninput="resizeTextarea(this);" maxlength="1000" required="" id="id_comment_text_{{ comment.pk }}"></textarea>
+  <textarea name="update_comment_text" cols="40" rows="1" class="form-control my-2 resizeTextarea" oninput="resizeTextarea(this);" maxlength="1000" required="" id="comment_Textare_{{ comment.pk }}"></textarea>
   <input type="hidden" name="update_id" value="{{ comment.pk }}">
 
 
   <div class="text-right my-2">
-    <button type="button" class="btn btn-info btn-sm" id="endEdit_comment_{{ comment.pk }}" onclick="endEdit(this);">キャンセル</button>
-    <button type="submit" class="btn btn-info btn-sm" name="CommentUpdateFormBtn" id="submit_{{ comment.pk }}" onclick="showComment_text(this);">編集 送信</button>
+    <button type="button" class="btn btn-info btn-sm" id="comment_CancelBtn_{{ comment.pk }}" onclick="CancelBtn('{{ comment.pk }}');">キャンセル</button>
+    <button type="submit" class="btn btn-info btn-sm" name="CommentUpdateFormBtn" id="comment_SubmitBtn_{{ comment.pk }}" onclick="comment_SubmitBtn_(this);">編集 送信</button>
   </div>
 </form>

@@ -5,7 +5,7 @@
   {{reply_update_form}}
 
   <!-- comment.idを含んで、処理する部分 -->
-  <textarea name="update_comment_text" cols="40" rows="1" class="form-control my-2" oninput="resizeTextarea(this);" maxlength="1000" required="" id="id_reply_text_{{ reply.pk }}"></textarea>
+  <textarea name="update_comment_text" cols="40" rows="1" class="form-control my-2 resizeTextarea" oninput="resizeTextarea(this);" maxlength="1000" required="" id="reply_Textare_{{ reply.pk }}"></textarea>
   <input type="hidden" name="update_id" value="{{ reply.pk }}">
 
 

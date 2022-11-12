@@ -10,38 +10,51 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
   <title>Hello, world!</title>
+  <style>
+    .ans {
+      display: none;
+      /* 初期設定は開く */
+      height: 60px;
+      background-color: yellow;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Hello, world!</h1>
-  <p>22</p>
+  <!-- <h1>Hello, world!</h1> -->
 
-  <div class="toast position-absolute bottom-0 end-0 m-4" roll="alert" aria-live="assertive" aria-atomic="true">
-    <!--ヘッダー-->
-    <div class="toast-header">
-      <strong class="me-auto">OFFICE54</strong>
-      <small>54 mins ago</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <!--ボディ-->
-    <div class="toast-body">
-      トーストの表示<br>
-      ここにメッセージを記入
-    </div>
-  </div>
+  <!-- <button type="button" id="q1" class="btn btn-primary" onclick="openQuestion(1);">開く</button>
+  <div class="ans bg-warning " id="a1">1個目が開閉する</div>
 
-  <!-- Optional JavaScript; choose one of the two! -->
+  <br><br>
 
-  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <button type="button" id="q2" class="btn btn-primary" onclick="openQuestion(2);">開く</button>
+  <div class="ans bg-warning " id="a2">2個目が開閉する</div> -->
+
+  <button type="button" id="q1" onclick="collapseTrigger(1);">開く</button>
+  <div class="ans" id="a1">1個目が開閉する</div>
+
+  <br><br>
+  <button type="button" id="q2" onclick="collapseTrigger(2);">開く</button>
+  <div class="ans" id="a2">2個目が開閉する</div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-
-
-  <!-- Option 2: Separate Popper and Bootstrap JS -->
-  <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
+  <script>
+    function collapseTrigger(num) {
+      console.log(num);
+      var status = document.getElementById("q" + num).textContent;
+      if (status == "開く") {
+        document.getElementById("q" + num).textContent = "閉じる";
+        document.getElementById("a" + num).style.display = "block";
+      }
+      if (status == "閉じる") {
+        document.getElementById("q" + num).textContent = "開く";
+        document.getElementById("a" + num).style.display = "none";
+      }
+      // exit;
+    }
+  </script>
 </body>
 
 </html>
