@@ -10,7 +10,7 @@
 
 
   <div class="text-right my-2">
-    <button type="button" class="btn btn-info btn-sm" id="comment_CancelBtn_{{ comment.pk }}" onclick="CancelBtn('{{ comment.pk }}');">キャンセル</button>
+    <button type="button" class="btn btn-info btn-sm" id="comment_CancelBtn_{{ comment.pk }}" onclick="CancelBtn(this);">キャンセル</button>
     <button type="submit" class="btn btn-info btn-sm" name="CommentUpdateFormBtn" id="comment_SubmitBtn_{{ comment.pk }}" onclick="comment_SubmitBtn_(this);">編集 送信</button>
   </div>
 </form>

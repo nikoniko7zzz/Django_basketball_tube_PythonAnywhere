@@ -13,9 +13,15 @@
         <a class="nav-item nav-link active" href="/">Home</a>
 
         {# {% if user.is_superuser %} #}
-        <a class="nav-link" href="/everyone/">管理者ページ / ノート(全員ページ)</a>
-        <!-- <a class="nav-link" href="/item/create/">管理者ページ / 動画追加</a> -->
-        <a class="nav-link" href="/item/list/">管理者ページ / 動画(作成・編集)</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            管理者ページ
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/everyone/">管理者ページ / ノート(全員ページ)</a></li>
+            <li><a class="dropdown-item" href="/item/list/">管理者ページ / 動画(作成・編集)</a></li>
+          </ul>
+        </li>
         {# {% endif %} #}
 
         <a class="nav-link" href="/comment/">ノート</a>
