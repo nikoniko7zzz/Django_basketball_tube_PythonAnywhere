@@ -12,7 +12,7 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link active" href="/">Home</a>
 
-        {# {% if user.is_superuser %} #}
+        {% if user.is_superuser %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             管理者ページ
@@ -22,7 +22,7 @@
             <li><a class="dropdown-item" href="/item/list/">動画(作成・編集)</a></li>
           </ul>
         </li>
-        {# {% endif %} #}
+        {% endif %}
 
         <a class="nav-link" href="/comment/">ノート</a>
 
