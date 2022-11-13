@@ -3,9 +3,18 @@
 {% block main %}
 <section class="container my-2">
   <!-- 入力補完 -->
-  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 練習内容">練習内容</button>
-  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 反省(スキルアップした点、改善点)">反省(スキルアップした点、改善点)</button>
-  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 明日の目標">明日の目標</button>
+  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 練習内容">
+    練習内容
+  </button>
+  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 反省(スキルアップした点、改善点)">
+    反省(スキルアップした点、改善点)
+  </button>
+  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 反省(スキルアップした点、改善点)">
+    頂いたアドバイス
+  </button>
+  <button type="button" class="btn btn-light mt-2 btn-sm" onclick="addText(this);" value="◆ 明日の目標">
+    明日の目標
+  </button>
 
   <!-- 入力フォーム -->
   {% include 'snippets/comment_form.html' %}
