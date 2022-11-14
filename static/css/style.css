@@ -47,6 +47,9 @@ body {
   color: white;
 } */
 
+.nonfield {
+  display: none;
+}
 
 /* bootstrapのclass */
 /*-------------------------
