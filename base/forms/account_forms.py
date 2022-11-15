@@ -11,6 +11,7 @@ class UserCreationForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ('username', 'email', 'password', )
+        # labels = {'username':'ユーザーネーム', 'email':'email', 'password':'パスワード' }
 
     def clean_password(self):
         # cleaned_dataにはformの中で 検証された後適切なデータとして確認されたデータが入ります。
