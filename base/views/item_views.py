@@ -29,7 +29,7 @@ class IndexListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Item.objects.order_by('created_at')
+        return Item.objects.order_by('-created_at')
 
 
 class TagListView(IndexListView, ListView):
