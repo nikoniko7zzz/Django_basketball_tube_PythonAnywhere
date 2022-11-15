@@ -28,6 +28,9 @@ class IndexListView(LoginRequiredMixin, ListView):
         context['total_item'] = Item.objects.all().count()
         return context
 
+    def get_queryset(self):
+        return Item.objects.order_by('created_at')
+
 
 class TagListView(IndexListView, ListView):
     paginate_by = 8
@@ -143,7 +146,7 @@ class ItemDetailView(ModelFormMixin, DetailView):
     def get_success_url(self):
         return reverse('item_detail', kwargs={'pk': self.object.pk})
 
-    # 動画に紐づいたコメント数を返す
+    # 動画に紐づいているものを返す
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         item = get_object_or_404(Item, pk=self.object.pk)
