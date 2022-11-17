@@ -2,19 +2,23 @@
 
 {% block main %}
 
-<div class="card w-100" style="border: 0px;">
-  <div class="embed-responsive embed-responsive-16by9">
-    <!-- embed: 埋め込み, rel=0: 関連動画を非表示, modestbranding=1: YouTubeロゴの非表示 -->
-    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{object.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-  </div>
-  <div class="card-body">
-    <div class="item_detail_basicData">
-      <div class="row justify-content-between">
-        <div class="col-4 align-self-start" style="padding-right: 0px;"><small class="card-text">#{{item.tag}}</small></div>
-        <div class="col-8 align-self-end text-right" style="padding-left: 0;"><small class="card-text">{{item.shooting_date}}</small></div>
+<div class="row justify-content-center">
+
+  <div class="card col-lg-10 col-md-12 p-0" style="border: 0px;">
+    <!-- <div class="card col-lg-10 col-md-12 offset-md-1 p-0" style="border: 0px;"> -->
+    <div class="embed-responsive embed-responsive-16by9">
+      <!-- embed: 埋め込み, rel=0: 関連動画を非表示, modestbranding=1: YouTubeロゴの非表示 -->
+      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{object.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+      </iframe>
+    </div>
+    <div class="card-body">
+      <div class="item_detail_basicData">
+        <div class="row justify-content-between">
+          <div class="col-4 align-self-start" style="padding-right: 0px;"><small class="card-text">#{{item.tag}}</small></div>
+          <div class="col-8 align-self-end text-right" style="padding-left: 0;"><small class="card-text">{{item.shooting_date}}</small></div>
+        </div>
+        <small class="card-title">{{item.title}}</small>
       </div>
-      <small class="card-title">{{item.title}}</small>
     </div>
 
 

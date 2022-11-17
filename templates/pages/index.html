@@ -12,10 +12,11 @@
 </section>
 
 <!-- 動画一覧 -->
-<section class="container" style="max-width:100%">
+<!-- <section class="container" style="max-width:100%"> -->
+<section class="px-2">
   <div class="row mt-2 mb-5">
     {% for item in item_list %}
-    <div class="col-12 col-lg-3 my-1">
+    <div class="col-12 col-lg-3 col-md-6 my-1">
       {% include 'snippets/item_box.html' %}
     </div>
     {% endfor %}

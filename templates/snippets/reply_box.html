@@ -9,9 +9,7 @@
 
       {% if user == reply.author %}
       <!-- 編集ボタンで開閉する コメント編集入力フォーム -->
-      <button class="badge btn btn-outline-primary" type="button" id="reply_EditTrigerBtn_{{ reply.pk }}" onclick="EditTrigerBtn(this);">
-        編集
-      </button>
+      <button class="badge btn btn-outline-primary" type="button" id="reply_EditTrigerBtn_{{ reply.pk }}" onclick="EditTrigerBtn(this);">編集</button>
       {% endif %}
 
     </div>

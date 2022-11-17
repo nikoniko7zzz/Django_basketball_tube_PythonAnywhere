@@ -10,9 +10,8 @@
           <!-- <small class="bg-info">詳しく見る</small> -->
           <span class="badge rounded-pill bg-info">詳しく見る</span>
         </div>
-
       </div>
-      <small class="card-title">{{item.title}}</small>
+      <small class="card-title">{{item.title|truncatechars:25}}</small>
     </div>
     <div class="embed-responsive embed-responsive-4by3">
       <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{item.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0">

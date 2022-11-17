@@ -12,6 +12,7 @@
         <a class="nav-item nav-link active" href="/">Home</a>
 
         {% if user.is_admin %}
+        <a class="nav-link" href="/comment/">ノート</a>
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -24,10 +25,18 @@
         </li>
         {% endif %}
 
-        <a class="nav-link" href="/comment/">ノート</a>
 
-        <a class="nav-link" href="/profile/">プロフィール</a>
-        <a class="nav-link" href="/account/">アカウント</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ユーザー設定
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/profile/">プロフィール</a></li>
+            <li><a class="dropdown-item" href="/account/">アカウント</a></li>
+          </ul>
+        </li>
+        <!-- <a class="nav-link" href="/profile/">プロフィール</a>
+        <a class="nav-link" href="/account/">アカウント</a> -->
 
 
         <!-- ログインしているか、していないかで出しわけ -->

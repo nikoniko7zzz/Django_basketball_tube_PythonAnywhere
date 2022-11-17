@@ -89,6 +89,7 @@ function addText(e){
 
 // 編集ボタンを押した後の動き
 const EditTrigerBtn = (e) => {
+  console.log(e);
   const set_dic = setting(e);      // 1
   moveAccordionFormBox(set_dic)    // 2
   editTextarea(set_dic)            // 3
@@ -104,6 +105,8 @@ const setting = (e) => {
   const click_btnText = click_btn.textContent;
   const edit_btn = document.getElementById(btn_id_dic.target + '_EditTrigerBtn_' + btn_id_dic.pk_num);
   const edit_btnText = edit_btn.textContent;
+  console.log('edit_btnTextは');
+  console.log(edit_btnText);
   const accordion_Form_Box = document.getElementById(btn_id_dic.target + '_Accordion_Form_Box_' + btn_id_dic.pk_num);
   const area = document.getElementById(btn_id_dic.target + '_Textare_' + btn_id_dic.pk_num);
   const original_data = document.getElementById(btn_id_dic.target + '_Original_Text_' + btn_id_dic.pk_num);
