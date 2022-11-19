@@ -26,6 +26,11 @@ window.onload = function onLoad() {
       linkBox[i].style.display ="none";
     }
   }
+  // id='alert'があったら、
+  if (document.getElementById('alert') != null) {
+    console.log('alertあります');
+    window.setTimeout(dispMsg, 3000);
+  }
 }
 
 /*
@@ -38,8 +43,8 @@ function dispMsg(){
   alert.style.display ="none";
 }
 
-// id='alert'があったら、
-if (document.getElementById('alert') != null) {
-  // console.log('alertあります');
-  window.setTimeout(dispMsg, 3000);
-}
+// // id='alert'があったら、
+// if (document.getElementById('alert') != null) {
+//   console.log('alertあります');
+//   window.setTimeout(dispMsg, 3000);
+// }
