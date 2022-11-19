@@ -176,7 +176,7 @@ class ItemListView(LoginRequiredMixin, ListView):
     #レコード情報をテンプレートに渡すオブジェクト
     context_object_name = "item_list"
     template_name = 'pages/item_list.html'
-    paginate_by = 20
+    paginate_by = 8
 
 
     def get_queryset(self):
