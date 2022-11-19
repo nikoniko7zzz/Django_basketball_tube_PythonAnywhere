@@ -11,7 +11,7 @@
       <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{object.youtube_url}}?rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
       </iframe>
     </div>
-    <div class="card-body">
+    <div class="card-body mx-2">
       <div class="item_detail_basicData">
         <div class="row justify-content-between">
           <div class="col-4 align-self-start" style="padding-right: 0px;"><small class="card-text">#{{item.tag}}</small></div>
@@ -21,64 +21,64 @@
       </div>
     </div>
 
-
-    <div class="accordion mt-2">
-      <!-- accordion_1 -->
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion_Item_1">
-          <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItem_1" aria-expanded="false" aria-controls="collapseItem_1">
-            動画詳細
-          </button>
-        </h2>
-        <div id="collapseItem_1" class="accordion-collapse collapse show" aria-labelledby="accordion_Item_1">
-          <div class="accordion-body py-2">
-            <!-- データを入力時と同じ改行で表示する value | linebreaksbr  -->
-            <small class="card-text">{{item.description | linebreaksbr }}</small>
-          </div>
-        </div>
-      </div>
-
-      <!-- accordion_2 -->
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion_Item_2">
-          <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItem_2" aria-expanded="false" aria-controls="collapseItem_2">
-            コメントする
-          </button>
-        </h2>
-        <div id="collapseItem_2" class="accordion-collapse collapse" aria-labelledby="accordion_Item_2">
-          <div class="accordion-body">
-            <!-- コメント入力フォーム -->
-            {% include 'snippets/comment_form.html' %}
-          </div>
-        </div>
-      </div>
-
-      <!-- accordion_3 -->
-      <div class="accordion-item">
-        <h2 class="accordion-header " id="accordion_Item_3">
-          <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItem_3" aria-expanded="false" aria-controls="collapseItem_3">
-            コメントを見る　
-            <span class="badge bg-primary rounded-pill">{{comment_count}}</span>
-          </button>
-        </h2>
-
-        <div id="collapseItem_3" class="accordion-collapse collapse" aria-labelledby="accordion_Item_3">
-          <div class="accordion-body">
-            <!-- 動画に紐づくコメントを一覧で表示 -->
-            <ol class="list-group list-group-numbered">
-              {% for comment in item.comment_set.all|dictsort:"created_at" %}
-              <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
-              {% include 'snippets/comment_box.html' %}
-              {% endfor %}
-            </ol>
+    <div class="card-body mx-2">
+      <div class="accordion mt-2">
+        <!-- accordion_1 -->
+        <div class="accordion-item mx-2">
+          <h2 class="accordion-header" id="accordion_Item_1">
+            <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItem_1" aria-expanded="false" aria-controls="collapseItem_1">
+              動画詳細
+            </button>
+          </h2>
+          <div id="collapseItem_1" class="accordion-collapse collapse show" aria-labelledby="accordion_Item_1">
+            <div class="accordion-body py-2">
+              <!-- データを入力時と同じ改行で表示する value | linebreaksbr  -->
+              <small class="card-text">{{item.description | linebreaksbr }}</small>
+            </div>
           </div>
         </div>
 
-      </div>
+        <!-- accordion_2 -->
+        <div class="accordion-item mx-2">
+          <h2 class="accordion-header" id="accordion_Item_2">
+            <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItem_2" aria-expanded="false" aria-controls="collapseItem_2">
+              コメントする
+            </button>
+          </h2>
+          <div id="collapseItem_2" class="accordion-collapse collapse" aria-labelledby="accordion_Item_2">
+            <div class="accordion-body">
+              <!-- コメント入力フォーム -->
+              {% include 'snippets/comment_form.html' %}
+            </div>
+          </div>
+        </div>
 
+        <!-- accordion_3 -->
+        <div class="accordion-item mx-2">
+          <h2 class="accordion-header " id="accordion_Item_3">
+            <button class="accordion-button collapsed btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItem_3" aria-expanded="false" aria-controls="collapseItem_3">
+              コメントを見る　
+              <span class="badge bg-primary rounded-pill">{{comment_count}}</span>
+            </button>
+          </h2>
+
+          <div id="collapseItem_3" class="accordion-collapse collapse" aria-labelledby="accordion_Item_3">
+            <div class="accordion-body">
+              <!-- 動画に紐づくコメントを一覧で表示 -->
+              <ol class="list-group list-group-numbered">
+                {% for comment in item.comment_set.all|dictsort:"created_at" %}
+                <!-- ひとつのコメントとそれに紐づく返信コメントの一覧 -->
+                {% include 'snippets/comment_box.html' %}
+                {% endfor %}
+              </ol>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
   </div>
-
 </div>
 
 
