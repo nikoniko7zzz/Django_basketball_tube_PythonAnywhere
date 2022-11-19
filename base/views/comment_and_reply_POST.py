@@ -1,3 +1,4 @@
+# 使わんかったファイル
 from base.forms import CommentCreateForm, ReplyCreateForm, CommentUpdateForm, ReplyUpdateForm
 from base.models import Item, Comment, Reply
 from datetime import datetime
