@@ -137,6 +137,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static'] #追加
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # カスタムユーザーモデルを使うための設定
 AUTH_USER_MODEL = 'base.User' # base.Userモデルを使う
