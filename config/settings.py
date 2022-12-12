@@ -77,16 +77,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#     }
+# }
 
 
 
@@ -158,34 +159,34 @@ try:
 except ImportError:
     pass
 
-if not DEBUG:
-    # Heroku settings
+# if not DEBUG:
+#     # Heroku settings
 
-    # staticの設定
-    import os
-    import django_heroku
+#     # staticの設定
+#     import os
+#     import django_heroku
 
-    import dj_database_url
-    db_from_env = dj_database_url.config()
-    DATABASES = {
-        'default': dj_database_url.config()
-    }
+#     import dj_database_url
+#     db_from_env = dj_database_url.config()
+#     DATABASES = {
+#         'default': dj_database_url.config()
+#     }
 
-    # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    BASE_DIR = Path(__file__).resolve().parent.parent # 追加
+#     # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#     BASE_DIR = Path(__file__).resolve().parent.parent # 追加
 
-    # Static files (CSS, JavaScript, Images)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATIC_URL = '/static/'
+#     # Static files (CSS, JavaScript, Images)
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#     STATIC_URL = '/static/'
 
-    # Extra places for collectstatic to find static files.
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
-    )
+#     # Extra places for collectstatic to find static files.
+#     STATICFILES_DIRS = (
+#         os.path.join(BASE_DIR, 'static'),
+#     )
 
-    MIDDLEWARE += [
-        'whitenoise.middleware.WhiteNoiseMiddleware',
-    ]
+#     MIDDLEWARE += [
+#         'whitenoise.middleware.WhiteNoiseMiddleware',
+#     ]
 
-    # HerokuのConfigを読み込み
-    django_heroku.settings(locals())
+#     # HerokuのConfigを読み込み
+#     django_heroku.settings(locals())
