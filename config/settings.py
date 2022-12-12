@@ -26,7 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent # 追加
 SECRET_KEY = '=$m+!cqytvm-549@eqzx2v6v#a#rkwht8nf^9%)ew&rnc*c$df'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -154,11 +155,11 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 DEBUG = False
 
-try:
-    # 存在する場合、ローカルの設定読み込み
-    from .settings_local import *
-except ImportError:
-    pass
+# try:
+#     # 存在する場合、ローカルの設定読み込み
+#     from .settings_local import *
+# except ImportError:
+#     pass
 
 # if not DEBUG:
 #     # Heroku settings
