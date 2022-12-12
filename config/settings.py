@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent # 追加
 SECRET_KEY = '=$m+!cqytvm-549@eqzx2v6v#a#rkwht8nf^9%)ew&rnc*c$df'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 # DEBUG = False
 
 # ALLOWED_HOSTS = []
@@ -79,12 +79,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# pythonanywhereデプロイ
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql', #mysqlをデータベースとして使用することを指定
+        'NAME': 'kunkun7$kunkun7databasename',                 #データベース名
+        'USER': 'kunkun7',             #データベースを作成したユーザー名
+        'PASSWORD': 'kuucham7',             #ログインするためのパスワード
+        'HOST': 'kunkun7.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
+
+# 開発
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
